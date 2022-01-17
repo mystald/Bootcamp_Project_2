@@ -15,9 +15,9 @@ namespace OrderService.Models
         public int CustomerId { get; set; }
         public int DriverId { get; set; }
         [Required]
-        public DbGeography startDest { get; set; }
+        public string startDest { get; set; }
         [Required]
-        public DbGeography endDest { get; set; }
+        public string endDest { get; set; }
         [Required]
         public int fee { get; set; }
         [Required]
