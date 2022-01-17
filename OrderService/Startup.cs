@@ -29,7 +29,8 @@ namespace OrderService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalDB"))
+                options.UseSqlServer(Configuration.GetConnectionString("LocalDB"),
+                x => x.UseNetTopologySuite())
             );
 
             services.AddControllers();

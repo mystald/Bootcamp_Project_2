@@ -71,8 +71,8 @@ namespace OrderService.Data
             {
                 var oldOrder = await GetById(id);
 
-                oldOrder.DriverId = obj.DriverId;
-                oldOrder.Status = obj.Status;
+                if (obj.DriverId != null) oldOrder.DriverId = obj.DriverId;
+                if (obj.Status != null) oldOrder.Status = obj.Status;
 
                 await _db.SaveChangesAsync();
 
