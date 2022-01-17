@@ -61,7 +61,7 @@ namespace OrderService.Data
 
                 var result = await _db.Orders.AddAsync(obj);
 
-                //await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 return result.Entity;
             }
