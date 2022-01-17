@@ -26,6 +26,7 @@ namespace OrderService.Controllers
         public async Task<ActionResult<Order>> AddOrder([FromBody] DtoOrderInsert order)
         {
             var result = await _order.Insert(_mapper.Map<Order>(order));
+            Console.WriteLine(result.endDest);
             return Ok(result);
         }
 

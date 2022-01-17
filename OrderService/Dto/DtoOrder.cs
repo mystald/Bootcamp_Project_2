@@ -12,6 +12,12 @@ namespace OrderService.Dto
         public location startDest { get; set; }
         public location endDest { get; set; }
     }
+    public class DtoOrderReturn
+    {
+        public int CustomerId { get; set; }
+        public location startDest { get; set; }
+        public location endDest { get; set; }
+    }
 
     public class location
     {

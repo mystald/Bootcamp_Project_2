@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OrderService.Data;
 using OrderService.Models;
 
 namespace OrderService
@@ -32,6 +33,10 @@ namespace OrderService
                 options.UseSqlServer(Configuration.GetConnectionString("LocalDB"),
                 x => x.UseNetTopologySuite())
             );
+
+            services.AddScoped<IOrder, DALOrder>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

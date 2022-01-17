@@ -53,6 +53,11 @@ namespace OrderService.Data
         {
             try
             {
+                obj.Status = status.waiting;
+
+                var distance = obj.startDest.Distance(obj.endDest);
+                obj.fee = distance * 1000;
+
                 var result = await _db.Orders.AddAsync(obj);
 
                 await _db.SaveChangesAsync();

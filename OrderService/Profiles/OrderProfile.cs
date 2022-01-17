@@ -15,9 +15,9 @@ namespace OrderService.Profiles
         {
             CreateMap<DtoOrderInsert, Order>()
                 .ForMember(dst => dst.startDest,
-                opt => opt.MapFrom(src => new Point(src.startDest.X, src.startDest.Y)))
+                opt => opt.MapFrom(src => new Point(src.startDest.X, src.startDest.Y) { SRID = 4326 }))
                 .ForMember(dst => dst.endDest,
-                opt => opt.MapFrom(src => new Point(src.endDest.X, src.endDest.Y)));
+                opt => opt.MapFrom(src => new Point(src.endDest.X, src.endDest.Y) { SRID = 4326 }));
         }
     }
 }

@@ -20,9 +20,9 @@ namespace OrderService.Models
         [Required]
         public Point endDest { get; set; }
         [Required]
-        public int fee { get; set; }
+        public double fee { get; set; }
         [Required]
-        public status? Status { get; set; }
+        public status Status { get; set; }
     }
 
     public enum status
