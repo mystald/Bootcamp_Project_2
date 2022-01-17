@@ -19,6 +19,8 @@ namespace DriverService.Models
         [Required]
         public string Position { get; set; }
         [Required]
+        public float Balance { get; set; }
+        [Required]
         public int UserId {get; set;}
     }
 }
