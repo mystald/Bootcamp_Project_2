@@ -20,6 +20,8 @@ namespace OrderService.Models
         [Required]
         public Point EndDest { get; set; }
         [Required]
+        public double Distance { get; set; }
+        [Required]
         public double Fee { get; set; }
         [Required]
         public status Status { get; set; }

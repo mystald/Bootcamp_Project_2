@@ -57,6 +57,8 @@ namespace OrderService.Data
 
                 var distance = obj.StartDest.Distance(obj.EndDest);
                 var fee = Math.Ceiling(distance * 1000);
+
+                obj.Distance = distance;
                 obj.Fee = fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;
 
                 var result = await _db.Orders.AddAsync(obj);
