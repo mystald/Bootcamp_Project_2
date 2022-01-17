@@ -30,13 +30,13 @@ namespace OrderService.Controllers
         }
 
         [HttpPost("{orderId}/accept")]
-        public async Task<ActionResult<DtoOrderReturn>> AcceptOrder(int orderId, [FromBody] int driverId)
+        public async Task<ActionResult<DtoOrderReturn>> AcceptOrder(int orderId, [FromBody] DtoOrderAccept order)
         {
             var result = await _order.Update(
                 orderId,
                 new Order
                 {
-                    DriverId = driverId,
+                    DriverId = order.DriverId,
                     Status = status.accepted
                 }
             );

@@ -13,6 +13,7 @@ namespace OrderService.Dto
         public location startDest { get; set; }
         public location endDest { get; set; }
     }
+
     public class DtoOrderReturn
     {
         public int Id { get; set; }
@@ -21,7 +22,12 @@ namespace OrderService.Dto
         public location startDest { get; set; }
         public location endDest { get; set; }
         public double fee { get; set; }
-        public status Status { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class DtoOrderAccept
+    {
+        public int DriverId { get; set; }
     }
 
     public class location

@@ -23,7 +23,9 @@ namespace OrderService.Profiles
                 .ForMember(dst => dst.startDest,
                 opt => opt.MapFrom(src => new location { X = src.startDest.X, Y = src.startDest.Y }))
                 .ForMember(dst => dst.endDest,
-                opt => opt.MapFrom(src => new location { X = src.endDest.X, Y = src.endDest.Y }));
+                opt => opt.MapFrom(src => new location { X = src.endDest.X, Y = src.endDest.Y }))
+                .ForMember(dst => dst.Status,
+                opt => opt.MapFrom(src => (status)src.Status));
         }
     }
 }
