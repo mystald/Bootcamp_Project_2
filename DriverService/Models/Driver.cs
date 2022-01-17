@@ -17,7 +17,9 @@ namespace DriverService.Models
         [Required]
         public DateTime BirthDate { get; set; }
         [Required]
-        public string Position { get; set; }
+        public double Latitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
         [Required]
         public float Balance { get; set; }
         [Required]

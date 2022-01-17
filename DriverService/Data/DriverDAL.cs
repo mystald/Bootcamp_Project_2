@@ -23,35 +23,22 @@ namespace DriverService.Data
         }
 
         //Get Balance Driver By Id
-        public async Task<IEnumerable<GetDriverBalanceDto>> GetBalanceById(string id)
+        public async Task<Driver> GetBalanceById(string id)
         {
-            var results = await (from d in _db.Drivers
-                                 where d.Id == Convert.ToInt32(id)
-                                 orderby d.FirstName ascending
-                                 select new GetDriverBalanceDto()
-                                 {
-                                     FirstName = d.FirstName,
-                                     LastName = d.LastName,
-                                     Balance = d.Balance
-                                 }).ToListAsync();
+            var results = await(from d in _db.Drivers
+                                where d.Id == Convert.ToInt32(id)
+                                select d).AsNoTracking().SingleOrDefaultAsync();
             if (results == null) throw new Exception($"Data {id} tidak temukan !");
 
             return results;
         }
 
         //Get Profile Driver By Id
-        public async Task<IEnumerable<GetDriverProfileDto>> GetProfileById(string id)
+        public async Task<Driver> GetProfileById(string id)
         {
-            var results = await (from d in _db.Drivers
-                                 where d.Id == Convert.ToInt32(id)
-                                 orderby d.FirstName ascending
-                                 select new GetDriverProfileDto()
-                                 {
-                                     FirstName = d.FirstName,
-                                     LastName = d.LastName,
-                                     BirthDate = d.BirthDate,
-                                     Position = d.Position
-                                 }).ToListAsync();
+            var results = await(from d in _db.Drivers
+                                where d.Id == Convert.ToInt32(id)
+                                select d).AsNoTracking().SingleOrDefaultAsync();
             if (results == null) throw new Exception($"Data {id} tidak temukan !");
 
             return results;
@@ -61,7 +48,8 @@ namespace DriverService.Data
         public void UpdatePosition(int id, Driver obj)
         {
             var result = _db.Drivers.FirstOrDefault(d => d.Id == id);
-            result.Position = obj.Position;
+            result.Latitude = obj.Latitude;
+            result.Longitude = obj.Longitude;
             _db.SaveChanges();
         }
 
@@ -76,12 +64,13 @@ namespace DriverService.Data
         {
             throw new NotImplementedException();
         }
-        
+
         //Save Changes
         public bool SaveChanges()
         {
             return (_db.SaveChanges() >= 0);
         }
-        
+
+  
     }
 }

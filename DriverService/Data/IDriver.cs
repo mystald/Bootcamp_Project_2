@@ -14,9 +14,11 @@ namespace DriverService.Data
         void UpdateFinishOrder(int id, Driver obj);
 
         IEnumerable<Driver> GetAllDrivers();
-        Task<IEnumerable<GetDriverBalanceDto>> GetBalanceById(string id);
-        Task<IEnumerable<GetDriverProfileDto>> GetProfileById(string id);
+        Task<Driver> GetBalanceById(string id);
+        Task<Driver> GetProfileById(string id);
         bool SaveChanges();
+        
+
         
     }
 }
