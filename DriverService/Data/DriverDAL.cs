@@ -17,9 +17,10 @@ namespace DriverService.Data
         }
         
         //Get All Driver
-        public IEnumerable<Driver> GetAllDrivers()
+        public async Task<IEnumerable<Driver>> GetAll()
         {
-            return _db.Drivers.ToList();
+            var results = await _db.Drivers.OrderBy(d => d.FirstName).ToListAsync();
+            return results;
         }
 
         //Get Balance Driver By Id
@@ -27,7 +28,7 @@ namespace DriverService.Data
         {
             var results = await(from d in _db.Drivers
                                 where d.Id == Convert.ToInt32(id)
-                                select d).AsNoTracking().SingleOrDefaultAsync();
+                                select d).SingleOrDefaultAsync();
             if (results == null) throw new Exception($"Data {id} tidak temukan !");
 
             return results;
@@ -38,16 +39,16 @@ namespace DriverService.Data
         {
             var results = await(from d in _db.Drivers
                                 where d.Id == Convert.ToInt32(id)
-                                select d).AsNoTracking().SingleOrDefaultAsync();
+                                select d).SingleOrDefaultAsync();
             if (results == null) throw new Exception($"Data {id} tidak temukan !");
 
             return results;
         }
 
-        //Update Position
+        //Update Position Driver By Id
         public void UpdatePosition(int id, Driver obj)
         {
-            var result = _db.Drivers.FirstOrDefault(d => d.Id == id);
+            var result = _db.Drivers.FirstOrDefault(p => p.Id == id);
             result.Latitude = obj.Latitude;
             result.Longitude = obj.Longitude;
             _db.SaveChanges();
@@ -59,7 +60,7 @@ namespace DriverService.Data
             throw new NotImplementedException();
         }
 
-        //Update Finisih Order -> Communication with Order Service
+        //Update Finish Order -> Communication with Order Service
         public void UpdateFinishOrder(int id, Driver obj)
         {
             throw new NotImplementedException();
@@ -71,6 +72,5 @@ namespace DriverService.Data
             return (_db.SaveChanges() >= 0);
         }
 
-  
     }
 }
