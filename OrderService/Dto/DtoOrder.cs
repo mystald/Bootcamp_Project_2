@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using OrderService.Models;
 
 namespace OrderService.Dto
 {
@@ -14,9 +15,13 @@ namespace OrderService.Dto
     }
     public class DtoOrderReturn
     {
+        public int Id { get; set; }
         public int CustomerId { get; set; }
+        public int? DriverId { get; set; }
         public location startDest { get; set; }
         public location endDest { get; set; }
+        public double fee { get; set; }
+        public status Status { get; set; }
     }
 
     public class location

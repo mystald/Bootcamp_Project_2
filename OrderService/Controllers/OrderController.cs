@@ -23,15 +23,14 @@ namespace OrderService.Controllers
             _mapper = mapper;
         }
         [HttpPost]
-        public async Task<ActionResult<Order>> AddOrder([FromBody] DtoOrderInsert order)
+        public async Task<ActionResult<DtoOrderReturn>> AddOrder([FromBody] DtoOrderInsert order)
         {
             var result = await _order.Insert(_mapper.Map<Order>(order));
-            Console.WriteLine(result.endDest);
-            return Ok(result);
+            return Ok(_mapper.Map<DtoOrderReturn>(result));
         }
 
         [HttpPost("{orderId}/accept")]
-        public async Task<ActionResult<Order>> AcceptOrder(int orderId, [FromBody] int driverId)
+        public async Task<ActionResult<DtoOrderReturn>> AcceptOrder(int orderId, [FromBody] int driverId)
         {
             var result = await _order.Update(
                 orderId,
@@ -41,11 +40,11 @@ namespace OrderService.Controllers
                     Status = status.accepted
                 }
             );
-            return Ok(result);
+            return Ok(_mapper.Map<DtoOrderReturn>(result));
         }
 
         [HttpPost("{orderId}/finish")]
-        public async Task<ActionResult<Order>> FinishOrder(int orderId)
+        public async Task<ActionResult<DtoOrderReturn>> FinishOrder(int orderId)
         {
             var result = await _order.Update(
                 orderId,
@@ -54,7 +53,7 @@ namespace OrderService.Controllers
                     Status = status.finished,
                 }
             );
-            return Ok(result);
+            return Ok(_mapper.Map<DtoOrderReturn>(result));
         }
     }
 }
