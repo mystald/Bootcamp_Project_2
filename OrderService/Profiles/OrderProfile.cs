@@ -14,16 +14,16 @@ namespace OrderService.Profiles
         public OrderProfile()
         {
             CreateMap<DtoOrderInsert, Order>()
-                .ForMember(dst => dst.startDest,
+                .ForMember(dst => dst.StartDest,
                 opt => opt.MapFrom(src => new Point(src.startDest.X, src.startDest.Y) { SRID = 4326 }))
-                .ForMember(dst => dst.endDest,
+                .ForMember(dst => dst.EndDest,
                 opt => opt.MapFrom(src => new Point(src.endDest.X, src.endDest.Y) { SRID = 4326 }));
 
             CreateMap<Order, DtoOrderReturn>()
-                .ForMember(dst => dst.startDest,
-                opt => opt.MapFrom(src => new location { X = src.startDest.X, Y = src.startDest.Y }))
-                .ForMember(dst => dst.endDest,
-                opt => opt.MapFrom(src => new location { X = src.endDest.X, Y = src.endDest.Y }))
+                .ForMember(dst => dst.StartDest,
+                opt => opt.MapFrom(src => new location { X = src.StartDest.X, Y = src.StartDest.Y }))
+                .ForMember(dst => dst.EndDest,
+                opt => opt.MapFrom(src => new location { X = src.EndDest.X, Y = src.EndDest.Y }))
                 .ForMember(dst => dst.Status,
                 opt => opt.MapFrom(src => (status)src.Status));
         }

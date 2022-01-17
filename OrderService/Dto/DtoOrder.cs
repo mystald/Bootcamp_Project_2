@@ -19,9 +19,9 @@ namespace OrderService.Dto
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int? DriverId { get; set; }
-        public location startDest { get; set; }
-        public location endDest { get; set; }
-        public double fee { get; set; }
+        public location StartDest { get; set; }
+        public location EndDest { get; set; }
+        public double Fee { get; set; }
         public string Status { get; set; }
     }
 

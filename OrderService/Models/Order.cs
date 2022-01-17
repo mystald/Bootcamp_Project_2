@@ -16,11 +16,11 @@ namespace OrderService.Models
         public int CustomerId { get; set; }
         public int? DriverId { get; set; }
         [Required]
-        public Point startDest { get; set; }
+        public Point StartDest { get; set; }
         [Required]
-        public Point endDest { get; set; }
+        public Point EndDest { get; set; }
         [Required]
-        public double fee { get; set; }
+        public double Fee { get; set; }
         [Required]
         public status Status { get; set; }
     }
