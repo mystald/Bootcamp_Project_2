@@ -8,7 +8,7 @@ namespace DriverService.Models
 {
     public class Driver
     {
-        [Required]
+        [Key]
         public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
