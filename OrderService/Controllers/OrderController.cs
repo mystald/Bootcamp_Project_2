@@ -11,7 +11,7 @@ using OrderService.Models;
 namespace OrderService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
         private IOrder _order;
