@@ -56,11 +56,12 @@ namespace OrderService.Data
                 obj.Status = status.waiting;
 
                 var distance = obj.startDest.Distance(obj.endDest);
-                obj.fee = distance * 1000;
+                var fee = Math.Ceiling(distance * 1000);
+                obj.fee = fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;
 
                 var result = await _db.Orders.AddAsync(obj);
 
-                await _db.SaveChangesAsync();
+                //await _db.SaveChangesAsync();
 
                 return result.Entity;
             }
