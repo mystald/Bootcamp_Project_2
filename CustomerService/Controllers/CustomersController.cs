@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using CustomerService.SyncDataServices.Http;
 
 namespace CustomerService.Controllers
 {
@@ -25,13 +26,15 @@ namespace CustomerService.Controllers
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IOrderDataClient _dataClient;
 
-        public CustomersController(ICustomer customer, IMapper mapper, IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory)
+        public CustomersController(ICustomer customer, IMapper mapper, IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory, IOrderDataClient dataClient)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _appSettings = appSettings.Value;
             _httpClientFactory = httpClientFactory;
+            _dataClient = dataClient;
         }
 
         [HttpGet]
@@ -117,24 +120,24 @@ namespace CustomerService.Controllers
         }
 
         [HttpGet("{id}/OrderHistory")]
-            public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int id)
-            {
-                var result = await _customer.GetById(id.ToString());
-                if (result == null)
-                    return NotFound();
+        public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int id)
+        {
+            var result = await _customer.GetById(id.ToString());
+            if (result == null)
+                return NotFound();
 
-                return Ok(_mapper.Map<DtoOrderOutput>(result));
-            }
+            return Ok(_mapper.Map<DtoOrderOutput>(result));
+        }
 
         [HttpGet("{id}/Fee")]
-            public async Task<ActionResult<DtoFee>> CheckFee(int id)
-            {
-                var result = await _customer.GetById(id.ToString());
-                if (result == null)
-                    return NotFound();
+        public async Task<ActionResult<DtoFee>> CheckFee(int id)
+        {
+            var result = await _customer.GetById(id.ToString());
+            if (result == null)
+                return NotFound();
 
-                return Ok(_mapper.Map<DtoOrderOutput>(result));
-            }
+            return Ok(_mapper.Map<DtoOrderOutput>(result));
+        }
 
 
         [HttpPost("Order")]
@@ -142,37 +145,39 @@ namespace CustomerService.Controllers
         {
             try
             {
-            var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
-            if (result != null)
-            {
-                HttpClientHandler clientHandler = new HttpClientHandler();
-          clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
+                if (result != null)
+                {
+                    // HttpClientHandler clientHandler = new HttpClientHandler();
+                    // clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-          using (var client = new HttpClient(clientHandler))
-          {
-            var json = JsonSerializer.Serialize(dtoOrderInsert);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(_appSettings.OrderService+ "/api/v1", data);
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("--> Sync POST to Order Service was OK !");
+                    // using (var client = new HttpClient(clientHandler))
+                    // {
+                    //     var json = JsonSerializer.Serialize(dtoOrderInsert);
+                    //     var data = new StringContent(json, Encoding.UTF8, "application/json");
+                    //     var response = await client.PostAsync(_appSettings.OrderService + "/api/v1", data);
+                    //     if (response.IsSuccessStatusCode)
+                    //     {
+                    //         Console.WriteLine("--> Sync POST to Order Service was OK !");
+                    //     }
+                    //     else
+                    //     {
+                    //         Console.WriteLine("--> Sync POST to Order Service failed");
+                    //     }
+                    // }
+
+                    await _dataClient.CreateOrder(dtoOrderInsert);
+
+                }
+                return Ok(dtoOrderInsert);
             }
-            else
+            catch (System.Exception ex)
             {
-                Console.WriteLine("--> Sync POST to Order Service failed");
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
             }
-          }
 
         }
-        return Ok(dtoOrderInsert);
-      }
-      catch (System.Exception ex)
-      {
-        Console.WriteLine(ex);
-        return BadRequest(ex.Message);
-      }
-
-    }
 
     }
 }
