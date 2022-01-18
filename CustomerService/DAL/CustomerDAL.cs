@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomerService.DAL
 {
-    public class CustomerDAL : ICustomer<Customer>
+    public class CustomerDAL : ICustomer
     {
         private ApplicationDbContext _db;
         public CustomerDAL(ApplicationDbContext db)
