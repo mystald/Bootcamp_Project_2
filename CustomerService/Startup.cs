@@ -73,9 +73,6 @@ namespace CustomerService
             services.AddScoped<ICustomer, CustomerDAL>();
             services.AddHttpClient<IOrderDataClient,HttpOrderDataClient>();
 
-            //services.AddControllers().AddNewtonsoftJson(options =>
-            //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-            //    .AddXmlDataContractSerializerFormatters();
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
