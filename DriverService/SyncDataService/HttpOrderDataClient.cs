@@ -28,7 +28,7 @@ namespace DriverService.SyncDataService.Http
 
             var url = _configuration["LocalOrderService"];
             
-            var response = await _httpClient.PostAsync($"{url}/{dri.DriverId}/accept", httpContent);
+            var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/accept", httpContent);
 
             if (response.IsSuccessStatusCode) 
             {
@@ -36,6 +36,7 @@ namespace DriverService.SyncDataService.Http
             }
             else
             {
+                Console.WriteLine(response.Content.ToString());
                 Console.WriteLine("--> Sync POST to OrderService Failed");
             }
         }
@@ -48,7 +49,7 @@ namespace DriverService.SyncDataService.Http
 
             var url = _configuration["LocalOrderService"];
 
-            var response = await _httpClient.PostAsync($"{url}/{dri.DriverId}/finish", httpContent);
+            var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/finish", httpContent);
 
             if (response.IsSuccessStatusCode)
             {

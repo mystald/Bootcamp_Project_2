@@ -80,7 +80,7 @@ namespace DriverService.Controllers
 
 
         //Update Accept Order
-        [HttpPost]   
+        [HttpPost("AcceptOrder")]   
         public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
         {
             try
@@ -109,7 +109,7 @@ namespace DriverService.Controllers
         }
 
         //Update Finish Order
-        [HttpPost]   
+        [HttpPost("FinishOrder")]   
         public async Task<ActionResult<AcceptOrderDto>> FinishAcceptOrder(FinishOrderDto finishOrderDto)
         {
             try

@@ -7,6 +7,7 @@ namespace DriverService.Dtos
 {
     public class FinishOrderDto
     {
+        public int OrderId {get; set;}
         public int DriverId { get; set; }
     }
 }
