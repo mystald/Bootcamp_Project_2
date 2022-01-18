@@ -17,7 +17,6 @@ namespace CustomerService.Profiles
                 opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
             CreateMap<GetCustomerForCreateDto, Customer>();
-            CreateMap<Customer, DtoOrderInsert>();
         }
 
 
