@@ -26,6 +26,12 @@ namespace OrderService.Profiles
                 opt => opt.MapFrom(src => new location { Lat = src.EndDest.X, Long = src.EndDest.Y }))
                 .ForMember(dst => dst.Status,
                 opt => opt.MapFrom(src => (status)src.Status));
+
+            CreateMap<DtoOrderCheckFeeInsert, Order>()
+                .ForMember(dst => dst.StartDest,
+                opt => opt.MapFrom(src => new Point(src.StartDest.Lat, src.StartDest.Long) { SRID = 4326 }))
+                .ForMember(dst => dst.EndDest,
+                opt => opt.MapFrom(src => new Point(src.EndDest.Lat, src.EndDest.Long) { SRID = 4326 }));
         }
     }
 }

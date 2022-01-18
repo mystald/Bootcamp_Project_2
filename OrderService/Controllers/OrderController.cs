@@ -31,6 +31,19 @@ namespace OrderService.Controllers
             return Ok(_mapper.Map<IEnumerable<DtoOrderReturn>>(result));
         }
 
+        [HttpPost("fee")]
+        public ActionResult<DtoOrderCheckFeeOutput> GetFee(DtoOrderCheckFeeInsert input)
+        {
+            var inputPoint = _mapper.Map<Order>(input);
+            var result = _order.GetFeeByDistance(inputPoint.StartDest.Distance(inputPoint.EndDest));
+            return Ok(new DtoOrderCheckFeeOutput
+            {
+                StartDest = input.StartDest,
+                EndDest = input.EndDest,
+                Fee = result,
+            });
+        }
+
         [HttpGet("customer/{customerId}")]
         public async Task<ActionResult<IEnumerable<DtoOrderReturn>>> GetByCustomer(int customerId)
         {
