@@ -15,6 +15,7 @@ namespace OrderService.Data
         {
             _db = db;
         }
+
         public async Task<Order> Delete(int id)
         {
             try
@@ -80,6 +81,7 @@ namespace OrderService.Data
                 var oldOrder = await GetById(id);
 
                 if (obj.DriverId != null) oldOrder.DriverId = obj.DriverId;
+                oldOrder.Status = obj.Status;
 
                 await _db.SaveChangesAsync();
 

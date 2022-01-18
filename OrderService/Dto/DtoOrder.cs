@@ -29,11 +29,18 @@ namespace OrderService.Dto
     public class DtoOrderAccept
     {
         public int DriverId { get; set; }
+        public double DriverLat { get; set; }
+        public double DriverLong { get; set; }
+    }
+
+    public class DtoOrderFinish
+    {
+        public int DriverId { get; set; }
     }
 
     public class location
     {
-        public double X { get; set; }
-        public double Y { get; set; }
+        public double Lat { get; set; }
+        public double Long { get; set; }
     }
 }
