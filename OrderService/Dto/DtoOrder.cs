@@ -38,6 +38,19 @@ namespace OrderService.Dto
         public int DriverId { get; set; }
     }
 
+    public class DtoOrderCheckFeeInsert
+    {
+        public location StartDest { get; set; }
+        public location EndDest { get; set; }
+    }
+
+    public class DtoOrderCheckFeeOutput
+    {
+        public location StartDest { get; set; }
+        public location EndDest { get; set; }
+        public double Fee { get; set; }
+    }
+
     public class location
     {
         public double Lat { get; set; }

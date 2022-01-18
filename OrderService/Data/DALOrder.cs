@@ -61,6 +61,13 @@ namespace OrderService.Data
             return result;
         }
 
+        public double GetFeeByDistance(double distance)
+        {
+            var fee = Math.Ceiling(distance * 1000);
+
+            return fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;
+        }
+
         public async Task<Order> Insert(Order obj)
         {
             try
@@ -68,12 +75,11 @@ namespace OrderService.Data
                 obj.Status = status.waiting;
 
                 var distance = obj.StartDest.Distance(obj.EndDest);
-                var fee = Math.Ceiling(distance * 1000);
 
                 if (distance == 0) throw new Exception("No distance between Starting Position and Destination");
 
                 obj.Distance = distance;
-                obj.Fee = fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;
+                obj.Fee = GetFeeByDistance(distance);
 
                 var result = await _db.Orders.AddAsync(obj);
 
