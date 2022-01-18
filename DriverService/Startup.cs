@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using DriverService.SyncDataService.Http;
 
 namespace DriverService
 {
@@ -41,6 +42,9 @@ namespace DriverService
 
             //Interface and DAL
             services.AddScoped<IDriver, DriverDAL>();
+
+            //HttpClient
+            services.AddHttpClient<IOrderDataClient, HttpOrderDataClient>();
 
             //Newtonsoft JSON and XML
             services.AddControllers().AddNewtonsoftJson(options =>

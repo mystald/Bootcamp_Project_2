@@ -6,6 +6,7 @@ using AutoMapper;
 using DriverService.Data;
 using DriverService.Dtos;
 using DriverService.Models;
+using DriverService.SyncDataService.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriverService.Controllers
@@ -16,10 +17,12 @@ namespace DriverService.Controllers
     {
         private IDriver _driver;
         private IMapper _mapper;
-        public DriversController(IDriver driver, IMapper mapper)
+         private readonly IOrderDataClient _orderDataClient;
+        public DriversController(IDriver driver, IMapper mapper, IOrderDataClient orderDataClient)
         {
             _driver = driver ?? throw new ArgumentNullException(nameof(driver));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
+            _orderDataClient = orderDataClient;
         }
 
         //Get All 
@@ -74,5 +77,67 @@ namespace DriverService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        //Update Accept Order
+        [HttpPost]   
+        public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
+        {
+            try
+            {
+                var driverGetById = _driver.GetProfileById(acceptOrderDto.DriverId.ToString());
+
+                if (driverGetById != null)
+                {
+                    //send sync communication
+                    try
+                    {
+                        await _orderDataClient.SendDriverToOderForAccept(acceptOrderDto);
+                        return Ok(acceptOrderDto);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"--> Could Not Send Synchronously: {ex.Message}");
+                    }
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //Update Finish Order
+        [HttpPost]   
+        public async Task<ActionResult<AcceptOrderDto>> FinishAcceptOrder(FinishOrderDto finishOrderDto)
+        {
+            try
+            {
+                var driverGetById = _driver.GetProfileById(finishOrderDto.DriverId.ToString());
+
+                if (driverGetById != null)
+                {
+                    //send sync communication
+                    try
+                    {
+                        await _orderDataClient.SendDriverToOderForFinish(finishOrderDto);
+                        return Ok(finishOrderDto);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"--> Could Not Send Synchronously: {ex.Message}");
+                    }
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
     }
 }
