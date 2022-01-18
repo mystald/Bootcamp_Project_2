@@ -150,11 +150,6 @@ namespace CustomerService.Controllers
 
           using (var client = new HttpClient(clientHandler))
           {
-            string token = Request.Headers["Authorization"];
-            string[] tokenWords = token.Split(' ');
-
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", tokenWords[1]);
             var json = JsonSerializer.Serialize(dtoOrderInsert);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync(_appSettings.OrderService+ "/api/v1", data);
@@ -169,7 +164,7 @@ namespace CustomerService.Controllers
           }
 
         }
-        return Ok(_mapper.Map<DtoOrderInsert>(result));
+        return Ok(dtoOrderInsert);
       }
       catch (System.Exception ex)
       {

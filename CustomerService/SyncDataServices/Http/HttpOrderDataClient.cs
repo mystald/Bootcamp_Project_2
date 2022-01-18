@@ -52,7 +52,9 @@ namespace CustomerService.SyncDataServices.Http
             }
             else
             {
-                Console.WriteLine("--> Sync POST to Order Service failed");
+                Console.WriteLine(response.Content.ToString());
+                Console.WriteLine(response.StatusCode.ToString());
+                Console.WriteLine("--> Sync POST to Order Service failed");   
             }
         }
 
