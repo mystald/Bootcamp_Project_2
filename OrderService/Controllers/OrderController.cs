@@ -31,6 +31,13 @@ namespace OrderService.Controllers
             return Ok(_mapper.Map<IEnumerable<DtoOrderReturn>>(result));
         }
 
+        [HttpGet("customer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<DtoOrderReturn>>> GetByCustomer(int customerId)
+        {
+            var result = await _order.GetByCustomerId(customerId);
+            return Ok(_mapper.Map<IEnumerable<DtoOrderReturn>>(result));
+        }
+
         [HttpPost]
         public async Task<ActionResult<DtoOrderReturn>> AddOrder([FromBody] DtoOrderInsert order)
         {

@@ -39,6 +39,17 @@ namespace OrderService.Data
             return await _db.Orders.ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetByCustomerId(int customerId)
+        {
+            var result = await _db.Orders.Where(
+                order => order.CustomerId == customerId
+            ).ToListAsync();
+
+            if (!result.Any()) throw new Exception("Order not found");
+
+            return result;
+        }
+
         public async Task<Order> GetById(int id)
         {
             var result = await _db.Orders.Where(
@@ -58,6 +69,8 @@ namespace OrderService.Data
 
                 var distance = obj.StartDest.Distance(obj.EndDest);
                 var fee = Math.Ceiling(distance * 1000);
+
+                if (distance == 0) throw new Exception("No distance between Starting Position and Destination");
 
                 obj.Distance = distance;
                 obj.Fee = fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;

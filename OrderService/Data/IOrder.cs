@@ -8,6 +8,6 @@ namespace OrderService.Data
 {
     public interface IOrder : ICrud<Order>
     {
-
+        Task<IEnumerable<Order>> GetByCustomerId(int customerId);
     }
 }
