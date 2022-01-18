@@ -6,12 +6,8 @@ using CustomerService.Models;
 
 namespace CustomerService.DAL
 {
-    public interface ICustomer<Customer>
+    public interface ICustomer : ICrud<Customer>
     {
-        Task<IEnumerable<Customer>> GetAll();
-        Task<Customer> GetById(string id);
-        Task<Customer> Insert(Customer obj);
-        Task<Customer> Update(string id, Customer obj);
-        Task Delete(string id);
+
     }
 }
