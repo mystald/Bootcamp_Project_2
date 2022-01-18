@@ -120,23 +120,43 @@ namespace CustomerService.Controllers
         }
 
         [HttpGet("{id}/OrderHistory")]
-        public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int id)
+        public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int CustomerId)
         {
-            var result = await _customer.GetById(id.ToString());
-            if (result == null)
+            try
+            {
+                var result = await _customer.GetById(CustomerId.ToString());
+                if (result! == null)
+                {
+                    var orderhistory = await _dataClient.GetOrderHistory(CustomerId);
+                    return Ok(orderhistory);
+                }
                 return NotFound();
-
-            return Ok(_mapper.Map<DtoOrderOutput>(result));
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}/Fee")]
-        public async Task<ActionResult<DtoFee>> CheckFee(int id)
+        public async Task<ActionResult<DtoFee>> CheckFee(int CustomerId)
         {
-            var result = await _customer.GetById(id.ToString());
-            if (result == null)
+            try
+            {
+                var result = await _customer.GetById(CustomerId.ToString());
+                if (result! == null)
+                {
+                    var fee = await _dataClient.CheckFee(CustomerId);
+                    return Ok(fee);
+                }
                 return NotFound();
-
-            return Ok(_mapper.Map<DtoOrderOutput>(result));
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
         }
 
 
