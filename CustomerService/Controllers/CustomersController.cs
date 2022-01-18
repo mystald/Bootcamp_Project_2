@@ -35,6 +35,54 @@ namespace CustomerService.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<GetCustomerDto>>> GetAllCustomer()
+        {
+            var customers = await _customer.GetAll();
+            var dtos = _mapper.Map<IEnumerable<GetCustomerDto>>(customers);
+            return Ok(dtos);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetCustomerDto>> GetCustomerById(int id)
+        {
+            var result = await _customer.GetById(id.ToString());
+            if (result == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<GetCustomerDto>(result));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<GetCustomerDto>> Post([FromBody] GetCustomerForCreateDto getCustomerForCreateDto)
+        {
+            try
+            {
+                var student = _mapper.Map<Customer>(getCustomerForCreateDto);
+                var result = await _customer.Insert(student);
+                var studentReturn = _mapper.Map<GetCustomerDto>(result);
+                return Ok(studentReturn);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _customer.Delete(id.ToString());
+                return Ok($"Data student {id} berhasil didelete");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Balance")]
         public async Task<ActionResult<IEnumerable<GetBalanceDto>>> ViewBalance()
         {
             var customers = await _customer.GetAll();
@@ -42,7 +90,7 @@ namespace CustomerService.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/Balance")]
         public async Task<ActionResult<GetBalanceDto>> ViewBalanceById(int id)
         {
             var result = await _customer.GetById(id.ToString());
@@ -52,7 +100,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetBalanceDto>(result));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/TopUp")]
         public async Task<ActionResult<GetBalanceDto>> TopUpBalance(int id, [FromBody] GetBalanceForCreateDto getBalanceForCreateDto)
         {
             try
@@ -68,20 +116,33 @@ namespace CustomerService.Controllers
             }
         }
 
-        // [HttpGet]
-        //     public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory()
-        //     {
-        //         var results = await _customer.GetAll();
-        //         return Ok(_mapper.Map<IEnumerable<DtoOrderOutput>>(results));
-        //     }
+        [HttpGet("{id}/OrderHistory")]
+            public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int id)
+            {
+                var result = await _customer.GetById(id.ToString());
+                if (result == null)
+                    return NotFound();
 
-        [HttpPost]
+                return Ok(_mapper.Map<DtoOrderOutput>(result));
+            }
+
+        [HttpGet("{id}/Fee")]
+            public async Task<ActionResult<DtoFee>> CheckFee(int id)
+            {
+                var result = await _customer.GetById(id.ToString());
+                if (result == null)
+                    return NotFound();
+
+                return Ok(_mapper.Map<DtoOrderOutput>(result));
+            }
+
+
+        [HttpPost("Order")]
         public async Task<ActionResult<GetBalanceDto>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {
             try
             {
-            var customerModel = _mapper.Map<Customer>(dtoOrderInsert);
-            var result = await _customer.Insert(customerModel);
+            var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
             if (result != null)
             {
                 HttpClientHandler clientHandler = new HttpClientHandler();
@@ -91,18 +152,12 @@ namespace CustomerService.Controllers
           {
             string token = Request.Headers["Authorization"];
             string[] tokenWords = token.Split(' ');
-            var order = new DtoOrderInsert
-            {
-              CustomerId = result.Id,
-              startDest = result.StartDest,
-              endDest = result.EndDest
-              
-            };
+
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", tokenWords[1]);
-            var json = JsonSerializer.Serialize(order);
+            var json = JsonSerializer.Serialize(dtoOrderInsert);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(_appSettings.OrderService, data);
+            var response = await client.PostAsync(_appSettings.OrderService+ "/api/v1", data);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to Order Service was OK !");
