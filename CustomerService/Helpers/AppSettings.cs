@@ -9,5 +9,6 @@ namespace CustomerService.Helpers
     {
         public string Secret { get; set; }
         public string AuthService { get; set; }
+        public string OrderService { get; set; }
     }
 }

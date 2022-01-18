@@ -8,6 +8,12 @@ using CustomerService.DAL;
 using CustomerService.Models;
 using CustomerService.Dtos;
 using AutoMapper;
+using Microsoft.Extensions.Options;
+using CustomerService.Helpers;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text;
 
 namespace CustomerService.Controllers
 {
@@ -17,11 +23,15 @@ namespace CustomerService.Controllers
     {
         private readonly ICustomer _customer;
         private readonly IMapper _mapper;
+        private readonly AppSettings _appSettings;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CustomersController(ICustomer customer, IMapper mapper)
+        public CustomersController(ICustomer customer, IMapper mapper, IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _appSettings = appSettings.Value;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]
@@ -57,6 +67,62 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // [HttpGet]
+        //     public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory()
+        //     {
+        //         var results = await _customer.GetAll();
+        //         return Ok(_mapper.Map<IEnumerable<DtoOrderOutput>>(results));
+        //     }
+
+        [HttpPost]
+        public async Task<ActionResult<GetBalanceDto>> CreateOrder(DtoOrderInsert dtoOrderInsert)
+        {
+            try
+            {
+            var customerModel = _mapper.Map<Customer>(dtoOrderInsert);
+            var result = await _customer.Insert(customerModel);
+            if (result != null)
+            {
+                HttpClientHandler clientHandler = new HttpClientHandler();
+          clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+          using (var client = new HttpClient(clientHandler))
+          {
+            string token = Request.Headers["Authorization"];
+            string[] tokenWords = token.Split(' ');
+            var order = new DtoOrderInsert
+            {
+              CustomerId = result.Id,
+              startDest = result.StartDest,
+              endDest = result.EndDest
+              
+            };
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", tokenWords[1]);
+            var json = JsonSerializer.Serialize(order);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(_appSettings.OrderService, data);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync POST to Order Service was OK !");
+            }
+            else
+            {
+                Console.WriteLine("--> Sync POST to Order Service failed");
+            }
+          }
+
+        }
+        return Ok(_mapper.Map<DtoOrderInsert>(result));
+      }
+      catch (System.Exception ex)
+      {
+        Console.WriteLine(ex);
+        return BadRequest(ex.Message);
+      }
+
     }
 
+    }
 }
