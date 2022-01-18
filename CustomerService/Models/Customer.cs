@@ -24,14 +24,7 @@ namespace CustomerService.Models
         [Required]
         public double Balance { get; set; }
         
-        [Required]
         public int? UserId {get; set;}
-
-        [Required]
-        public double StartDest { get; set; }
-        
-        [Required]
-        public double EndDest { get; set; }
 
         
     }

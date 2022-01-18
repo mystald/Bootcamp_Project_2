@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CustomerService.DAL;
 using CustomerService.Data;
 using CustomerService.Helpers;
+using CustomerService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -70,6 +71,7 @@ namespace CustomerService
             });
 
             services.AddScoped<ICustomer, CustomerDAL>();
+            services.AddHttpClient<IOrderDataClient,HttpOrderDataClient>();
 
             //services.AddControllers().AddNewtonsoftJson(options =>
             //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)

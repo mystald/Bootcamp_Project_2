@@ -9,8 +9,14 @@ namespace CustomerService.Dtos
     public class DtoOrderInsert
     {
         public int CustomerId { get; set; }
-        public double startDest { get; set; }
-        public double endDest { get; set; }
+        public location startDest { get; set; }
+        public location endDest { get; set; }
+    }
+
+    public class location
+    {
+        public double Lat { get; set; }
+        public double Long { get; set; }
     }
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CustomerService.Data;
 using CustomerService.Models;
@@ -11,9 +12,13 @@ namespace CustomerService.DAL
     public class CustomerDAL : ICustomer
     {
         private ApplicationDbContext _db;
-        public CustomerDAL(ApplicationDbContext db)
+        IHttpClientFactory _httpClientFactory;
+
+        public CustomerDAL(ApplicationDbContext db, IHttpClientFactory httpClientFactory)
         {
             _db = db;
+            _httpClientFactory = httpClientFactory;
+            
         }
         public async Task Delete(string id)
         {
@@ -32,9 +37,11 @@ namespace CustomerService.DAL
 
         public async Task<IEnumerable<Customer>> GetAll()
         {
-            var results = await (from s in _db.Customers
-                                 orderby s.FirstName ascending
-                                 select s).ToListAsync();
+            // var results = await (from s in _db.Customers
+            //                      orderby s.FirstName ascending
+            //                      select s).ToListAsync();
+            // return results;
+            var results = await _db.Customers.OrderBy(d => d.FirstName).ToListAsync();
             return results;
         }
 
