@@ -119,13 +119,13 @@ namespace CustomerService.Controllers
             }
         }
 
-        [HttpGet("{id}/OrderHistory")]
-        public async Task<ActionResult<DtoOrderOutput>> ViewOrderHistory(int CustomerId)
+        [HttpGet("{CustomerId}/OrderHistory")]
+        public async Task<ActionResult<IEnumerable<DtoOrderOutput>>> ViewOrderHistory(int CustomerId)
         {
             try
             {
                 var result = await _customer.GetById(CustomerId.ToString());
-                if (result! == null)
+                if (result != null)
                 {
                     var orderhistory = await _dataClient.GetOrderHistory(CustomerId);
                     return Ok(orderhistory);
@@ -139,18 +139,13 @@ namespace CustomerService.Controllers
             }
         }
 
-        [HttpGet("{id}/Fee")]
-        public async Task<ActionResult<DtoFee>> CheckFee(int CustomerId)
+        [HttpPost("Fee")]
+        public async Task<ActionResult<DtoFeeOutput>> CheckFee(DtoFeeInsert input)
         {
             try
             {
-                var result = await _customer.GetById(CustomerId.ToString());
-                if (result! == null)
-                {
-                    var fee = await _dataClient.CheckFee(CustomerId);
-                    return Ok(fee);
-                }
-                return NotFound();
+                var fee = await _dataClient.CheckFee(input);
+                return Ok(fee);
             }
             catch (System.Exception ex)
             {

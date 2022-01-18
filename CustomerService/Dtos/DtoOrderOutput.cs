@@ -7,11 +7,12 @@ namespace CustomerService.Dtos
 {
     public class DtoOrderOutput
     {
-        public int CustomerId { get; set; }
-        public location StartDest { get; set; }
-        public location EndDest { get; set; }
-        public double Distance { get; set; }
-        public double Fee { get; set; }
-        public string Status { get; set; }
+        public int customerId { get; set; }
+        public int? driverId { get; set; }
+        public location startDest { get; set; }
+        public location endDest { get; set; }
+        public double distance { get; set; }
+        public double fee { get; set; }
+        public string status { get; set; }
     }
 }

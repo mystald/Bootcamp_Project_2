@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using CustomerService.Dtos;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace CustomerService.SyncDataServices.Http
 {
@@ -19,12 +20,12 @@ namespace CustomerService.SyncDataServices.Http
             _configuration = configuration;
         }
 
-        public async Task<DtoFee> CheckFee(int CustomerId)
+        public async Task<DtoFeeOutput> CheckFee(DtoFeeInsert insert)
         {
             var httpContent = new StringContent(
-                JsonSerializer.Serialize(CustomerId),
+                JsonSerializer.Serialize(insert),
                 Encoding.UTF8, "application/json");
-            var url = _configuration["OrderService"];
+            var url = _configuration["AppSettings:OrderService"];
             var response = await _httpClient.PostAsync($"{url}/fee", httpContent);
             if (response.IsSuccessStatusCode)
             {
@@ -35,7 +36,8 @@ namespace CustomerService.SyncDataServices.Http
                 Console.WriteLine(response.Content.ToString());
                 Console.WriteLine("--> Sync POST to Order Service failed");
             }
-            var value = JsonSerializer.Deserialize<DtoFee>(await response.Content.ReadAsStringAsync());
+            Console.WriteLine(response.Content.ReadAsStringAsync());
+            var value = JsonSerializer.Deserialize<DtoFeeOutput>(await response.Content.ReadAsStringAsync());
             return value;
 
         }
@@ -61,13 +63,13 @@ namespace CustomerService.SyncDataServices.Http
             }
         }
 
-        public async Task<DtoOrderOutput> GetOrderHistory(int CustomerId)
+        public async Task<IEnumerable<DtoOrderOutput>> GetOrderHistory(int CustomerId)
         {
-            var httpContent = new StringContent(
-                JsonSerializer.Serialize(CustomerId),
-                Encoding.UTF8, "application/json");
-            var url = _configuration["OrderService"];
-            var response = await _httpClient.PostAsync($"{url}/history", httpContent);
+            // var httpContent = new StringContent(
+            //     JsonSerializer.Serialize(CustomerId),
+            //     Encoding.UTF8, "application/json");
+            var url = _configuration["AppSettings:OrderService"];
+            var response = await _httpClient.GetAsync($"{url}/customer/{CustomerId}");
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to Order Service was OK !");
@@ -75,8 +77,9 @@ namespace CustomerService.SyncDataServices.Http
             else
             {
                 Console.WriteLine("--> Sync POST to Order Service failed");
+                Console.WriteLine(response.StatusCode);
             }
-            var value = JsonSerializer.Deserialize<DtoOrderOutput>(await response.Content.ReadAsStringAsync());
+            var value = JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
             return value;
         }
     }
