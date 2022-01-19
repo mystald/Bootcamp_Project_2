@@ -15,20 +15,6 @@ namespace OrderService.Data
         {
             _db = db;
         }
-        public Task<Price> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Price>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Price> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public double GetByName(string name)
         {
@@ -39,16 +25,6 @@ namespace OrderService.Data
             if (result == null) throw new Exception("Price not found");
 
             return result.Value;
-        }
-
-        public Task<Price> Insert(Price obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Price> Update(int id, Price obj)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Price> Update(string name, Price obj)

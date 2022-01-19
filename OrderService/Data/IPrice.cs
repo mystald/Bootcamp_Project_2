@@ -6,7 +6,7 @@ using OrderService.Models;
 
 namespace OrderService.Data
 {
-    public interface IPrice : ICrud<Price>
+    public interface IPrice
     {
         Task<Price> Update(string name, Price obj);
         double GetByName(string name);
