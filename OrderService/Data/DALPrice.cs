@@ -51,11 +51,13 @@ namespace OrderService.Data
             throw new NotImplementedException();
         }
 
-        public async Task<Price> Update(Price obj)
+        public async Task<Price> Update(string name, Price obj)
         {
             try
             {
-                var oldCost = await _db.Prices.FirstOrDefaultAsync();
+                var oldCost = await _db.Prices.Where(
+                    price => price.Name == name
+                ).SingleOrDefaultAsync();
 
                 oldCost.Value = obj.Value;
 

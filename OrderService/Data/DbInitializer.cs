@@ -11,14 +11,14 @@ namespace OrderService.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            var normalPrice = context.Prices.Where(price => price.Name == "NormalPricePerKM").SingleOrDefault();
+            var normalPrice = context.Prices.Where(price => price.Name == "Normal").SingleOrDefault();
 
             if (normalPrice == null)
             {
                 context.Prices.Add(
                     new Price
                     {
-                        Name = "NormalPricePerKM",
+                        Name = "Normal",
                         Value = 1000,
                     }
                 );

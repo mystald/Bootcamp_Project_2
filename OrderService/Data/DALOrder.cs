@@ -65,7 +65,7 @@ namespace OrderService.Data
 
         public double GetFeeByDistance(double distance)
         {
-            var feePerKM = _price.GetByName("NormalPricePerKM");
+            var feePerKM = _price.GetByName("Normal");
 
             var fee = Math.Ceiling(distance * feePerKM);
 

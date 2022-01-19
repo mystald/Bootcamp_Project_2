@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Data;
+using OrderService.Dto;
 using OrderService.Models;
 
 namespace OrderService.Controllers
@@ -20,17 +21,24 @@ namespace OrderService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<double>> SetPrice(double newPrice)
+        public async Task<ActionResult<DtoPrice>> SetPrice(DtoPrice input)
         {
             try
             {
                 var result = await _price.Update(
+                    input.name,
                     new Price
                     {
-                        Value = newPrice
+                        Value = input.value
                     }
                 );
-                return Ok(result.Value);
+                return Ok(
+                    new DtoPrice
+                    {
+                        name = result.Name,
+                        value = result.Value,
+                    }
+                );
             }
             catch (System.Exception ex)
             {
