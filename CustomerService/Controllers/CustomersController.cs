@@ -163,19 +163,20 @@ namespace CustomerService.Controllers
         }
 
         [HttpPost("Order")]
-        public async Task<ActionResult<GetBalanceDto>> CreateOrder(DtoOrderInsert dtoOrderInsert)
+        public async Task<ActionResult<DtoOrderInsert>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {
             try
             {
                 var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
                 if (result != null)
                 {
-                    await _dataClient.CreateOrder(dtoOrderInsert);
+                    var orderResult = await _dataClient.CreateOrder(dtoOrderInsert);
 
-                    var key = "Create-Order-Customer-" + DateTime.Now.ToString();
-                    var val = JObject.FromObject(dtoOrderInsert).ToString(Formatting.None);
+                    var key = $"NewOrder-{DateTime.Now.ToString()}";
+                    var val = JObject.FromObject(_mapper.Map<DtoOrderForKafka>(orderResult)).ToString(Formatting.None);
                     await KafkaHelper.SendMessage(configuration, "CreateOrderCustomer", key, val);
                 }
+
                 return Ok(dtoOrderInsert);
             }
             catch (System.Exception ex)

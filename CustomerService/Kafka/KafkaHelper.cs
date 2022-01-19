@@ -35,9 +35,9 @@ namespace CustomerService.Kafka
                     }
                     else
                     {
+                        // TODO delete trace logs
                         Console.WriteLine(deliveryReport.Error.Reason);
                         Console.WriteLine(deliveryReport.Message.Value);
-                        Console.WriteLine(deliveryReport.Topic);
                         Console.WriteLine($"Produced message to: {deliveryReport.TopicPartitionOffset}");
                         succeed = true;
                     }
