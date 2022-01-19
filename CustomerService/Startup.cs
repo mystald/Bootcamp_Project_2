@@ -36,8 +36,9 @@ namespace CustomerService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Local")));
+            options.UseSqlServer(Configuration.GetConnectionString("")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -73,7 +74,7 @@ namespace CustomerService
             services.AddScoped<ICustomer, CustomerDAL>();
             services.AddHttpClient<IOrderDataClient,HttpOrderDataClient>();
 
-            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSwaggerGen(c =>

@@ -21,7 +21,7 @@ namespace KafkaListeningAppDriver
                 GroupId = "tester",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
-            var topic = "Logging";
+            var topic = "CreateOrderCustomer";
             CancellationTokenSource cts = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) => {
                 e.Cancel = true; // prevent the process from terminating.
@@ -33,6 +33,7 @@ namespace KafkaListeningAppDriver
                 Console.WriteLine("Connected");
                 consumer.Subscribe(topic);
                 Console.WriteLine("Waiting messages....");
+                //Console.WriteLine(consumer.)
                 try
                 {
                     while (true)

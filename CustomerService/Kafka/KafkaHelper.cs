@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CustomerService.Models;
 using Confluent.Kafka;
 using Confluent.Kafka.Admin;
+using Microsoft.Extensions.Configuration;
 
 namespace CustomerService.Kafka
 {
@@ -26,9 +27,11 @@ namespace CustomerService.Kafka
                     await adminClient.CreateTopicsAsync(new List<TopicSpecification> {
                         new TopicSpecification {
                             Name = topic,
-                            NumPartitions = configuration["KafkaSettings:NumPartitions"],
-                            ReplicationFactor = configuration["KafkaSettings:ReplicationFactor"]} });
-                }
+                            NumPartitions = Convert.ToInt32(configuration["KafkaSettings:NumPartitions"]),
+                            ReplicationFactor = Convert.ToInt16(configuration["KafkaSettings:ReplicationFactor"])
+                            }
+                        });
+                    }
                 catch (CreateTopicsException e)
                 {
                     if (e.Results[0].Error.Code != ErrorCode.TopicAlreadyExists)
@@ -55,6 +58,9 @@ namespace CustomerService.Kafka
                     }
                     else
                     {
+                        Console.WriteLine(deliveryReport.Error.Reason);
+                        Console.WriteLine(deliveryReport.Message.Value);
+                        Console.WriteLine(deliveryReport.Topic);
                         Console.WriteLine($"Produced message to: {deliveryReport.TopicPartitionOffset}");
                         succeed = true;
                     }

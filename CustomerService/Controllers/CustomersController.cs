@@ -15,7 +15,10 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using CustomerService.SyncDataServices.Http;
-
+using CustomerService.Kafka;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace CustomerService.Controllers
 {
@@ -23,23 +26,23 @@ namespace CustomerService.Controllers
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly ICustomer _customer;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOrderDataClient _dataClient;
-        private readonly KafkaSettings _kafkaSettings;
 
         public CustomersController(ICustomer customer, IMapper mapper, 
         IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory, 
-        IOrderDataClient dataClient, IOptions<KafkaSettings> kafkaSettings)
+        IOrderDataClient dataClient, IConfiguration config)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _appSettings = appSettings.Value;
             _httpClientFactory = httpClientFactory;
             _dataClient = dataClient;
-            _kafkaSettings = kafkaSettings;
+            configuration = config;
         }
 
         [HttpGet]
@@ -168,11 +171,9 @@ namespace CustomerService.Controllers
                 if (result != null)
                 {
                     await _dataClient.CreateOrder(dtoOrderInsert);
-
                     var key = "Create-Order-Customer-" + DateTime.Now.ToString();
-                    var val = JObject.FromObject(twittor).ToString(Formatting.None);
-                    var result = await KafkaHelper.SendMessage(_kafkaSettings.Value, "CreateOrderCustomer", key, val);
-                    await KafkaHelper.SendMessage(_kafkaSettings.Value, "Logging", key, val);
+                    var val = JObject.FromObject(dtoOrderInsert).ToString(Formatting.None);
+                    await KafkaHelper.SendMessage(configuration, "CreateOrderCustomer", key, val);
                 }
                 return Ok(dtoOrderInsert);
             }
