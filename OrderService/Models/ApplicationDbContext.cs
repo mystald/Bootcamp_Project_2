@@ -7,5 +7,6 @@ namespace OrderService.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Price> Prices { get; set; }
     }
 }
