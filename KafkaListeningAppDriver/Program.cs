@@ -14,26 +14,27 @@ namespace KafkaListeningAppDriver
 
             var config = builder.Build();
 
-
             var Serverconfig = new ConsumerConfig
             {
                 BootstrapServers = config["Settings:KafkaServer"],
                 GroupId = "tester",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
+
             var topic = "CreateOrderCustomer";
+
             CancellationTokenSource cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => {
-                e.Cancel = true; // prevent the process from terminating.
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true;
                 cts.Cancel();
             };
 
             using (var consumer = new ConsumerBuilder<string, string>(Serverconfig).Build())
             {
-                Console.WriteLine("Connected");
                 consumer.Subscribe(topic);
                 Console.WriteLine("Waiting messages....");
-                //Console.WriteLine(consumer.)
+
                 try
                 {
                     while (true)

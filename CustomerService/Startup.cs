@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CustomerService.DAL;
 using CustomerService.Data;
 using CustomerService.Helpers;
+using CustomerService.Kafka;
 using CustomerService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -72,7 +73,7 @@ namespace CustomerService
             });
 
             services.AddScoped<ICustomer, CustomerDAL>();
-            services.AddHttpClient<IOrderDataClient,HttpOrderDataClient>();
+            services.AddHttpClient<IOrderDataClient, HttpOrderDataClient>();
 
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -103,7 +104,7 @@ namespace CustomerService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -111,12 +112,14 @@ namespace CustomerService
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Service v1"));
             }
-        
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            await KafkaHelper.CreateTopic(Configuration, "CreateOrderCustomer");
 
             app.UseEndpoints(endpoints =>
             {

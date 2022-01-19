@@ -33,8 +33,8 @@ namespace CustomerService.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOrderDataClient _dataClient;
 
-        public CustomersController(ICustomer customer, IMapper mapper, 
-        IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory, 
+        public CustomersController(ICustomer customer, IMapper mapper,
+        IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory,
         IOrderDataClient dataClient, IConfiguration config)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
@@ -171,6 +171,7 @@ namespace CustomerService.Controllers
                 if (result != null)
                 {
                     await _dataClient.CreateOrder(dtoOrderInsert);
+
                     var key = "Create-Order-Customer-" + DateTime.Now.ToString();
                     var val = JObject.FromObject(dtoOrderInsert).ToString(Formatting.None);
                     await KafkaHelper.SendMessage(configuration, "CreateOrderCustomer", key, val);

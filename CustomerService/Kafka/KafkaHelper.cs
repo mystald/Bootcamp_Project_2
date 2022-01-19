@@ -20,30 +20,7 @@ namespace CustomerService.Kafka
                 BootstrapServers = configuration["KafkaSettings:Server"],
                 ClientId = Dns.GetHostName(),
             };
-            using (var adminClient = new AdminClientBuilder(config).Build())
-            {
-                try
-                {
-                    await adminClient.CreateTopicsAsync(new List<TopicSpecification> {
-                        new TopicSpecification {
-                            Name = topic,
-                            NumPartitions = Convert.ToInt32(configuration["KafkaSettings:NumPartitions"]),
-                            ReplicationFactor = Convert.ToInt16(configuration["KafkaSettings:ReplicationFactor"])
-                            }
-                        });
-                    }
-                catch (CreateTopicsException e)
-                {
-                    if (e.Results[0].Error.Code != ErrorCode.TopicAlreadyExists)
-                    {
-                        Console.WriteLine($"An error occured creating topic {topic}: {e.Results[0].Error.Reason}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Topic already exists");
-                    }
-                }
-            }
+
             using (var producer = new ProducerBuilder<string, string>(config).Build())
             {
                 producer.Produce(topic, new Message<string, string>
@@ -69,6 +46,40 @@ namespace CustomerService.Kafka
             }
 
             return await Task.FromResult(succeed);
+        }
+
+        public static async Task CreateTopic(IConfiguration configuration, string topic)
+        {
+            var config = new ProducerConfig
+            {
+                BootstrapServers = configuration["KafkaSettings:Server"],
+                ClientId = Dns.GetHostName(),
+            };
+
+            using (var adminClient = new AdminClientBuilder(config).Build())
+            {
+                try
+                {
+                    await adminClient.CreateTopicsAsync(new List<TopicSpecification> {
+                        new TopicSpecification {
+                            Name = topic,
+                            NumPartitions = Convert.ToInt32(configuration["KafkaSettings:NumPartitions"]),
+                            ReplicationFactor = Convert.ToInt16(configuration["KafkaSettings:ReplicationFactor"])
+                            }
+                        });
+                }
+                catch (CreateTopicsException e)
+                {
+                    if (e.Results[0].Error.Code != ErrorCode.TopicAlreadyExists)
+                    {
+                        Console.WriteLine($"An error occured creating topic {topic}: {e.Results[0].Error.Reason}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Topic already exists");
+                    }
+                }
+            }
         }
     }
 }
