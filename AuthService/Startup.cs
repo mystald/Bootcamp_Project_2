@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AuthService.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace AuthService
@@ -31,6 +35,32 @@ namespace AuthService
             services.AddDbContext<ApplicationDbContext>(
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("LocalDB"))
             );
+
+            services.AddIdentityCore<IdentityUser>(options =>
+            {
+                // options.Password.RequiredLength = 8;
+                // options.Password.RequireLowercase = true;
+                // options.Password.RequireUppercase = true;
+                // options.Password.RequireNonAlphanumeric = true;
+                // options.Password.RequireDigit = true;
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                    };
+                });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -52,6 +82,8 @@ namespace AuthService
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
