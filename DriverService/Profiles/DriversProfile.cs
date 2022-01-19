@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using DriverService.Dtos;
 using DriverService.Models;
@@ -11,7 +12,11 @@ namespace DriverService.Profiles
          CreateMap<Driver, DriverDto>();
          CreateMap<UpdateForPositionDto, Driver>();
          CreateMap<Driver, GetDriverBalanceDto>();
-         CreateMap<Driver, GetDriverProfileDto>();        
+         CreateMap<Driver, GetDriverProfileDto>()
+         .ForMember(dest => dest.Name,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+                .ForMember(dest => dest.Age,
+                opt => opt.MapFrom(src => DateTime.Today.Year - src.BirthDate.Year));        
         }
     }
 }

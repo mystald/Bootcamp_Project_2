@@ -1,0 +1,7 @@
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.csproj.AssemblyReference.cache
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.AssemblyInfoInputs.cache
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.AssemblyInfo.cs
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.csproj.CoreCompileInputs.cache
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Arizal Pratama T A\Bootcamp_Project_2\customerservice\obj\Debug\net5.0\CustomerService.MvcApplicationPartsAssemblyInfo.cache

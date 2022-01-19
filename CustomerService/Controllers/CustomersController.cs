@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text;
 using CustomerService.SyncDataServices.Http;
 
+
 namespace CustomerService.Controllers
 {
     [ApiController]
@@ -27,8 +28,6 @@ namespace CustomerService.Controllers
         private readonly AppSettings _appSettings;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOrderDataClient _dataClient;
-        private readonly IOrderDataClient _dataClient;
-
         private readonly KafkaSettings _kafkaSettings;
 
         public CustomersController(ICustomer customer, IMapper mapper, 
@@ -160,7 +159,6 @@ namespace CustomerService.Controllers
             }
         }
 
-
         [HttpPost("Order")]
         public async Task<ActionResult<GetBalanceDto>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {
@@ -170,10 +168,10 @@ namespace CustomerService.Controllers
                 if (result != null)
                 {
                     await _dataClient.CreateOrder(dtoOrderInsert);
-                    //Kafka...
-                    var key = "Create-Order-" + DateTime.Now.ToString();
+
+                    var key = "Create-Order-Customer-" + DateTime.Now.ToString();
                     var val = JObject.FromObject(twittor).ToString(Formatting.None);
-                    var result = await KafkaHelper.SendMessage(_kafkaSettings.Value, "Create", key, val);
+                    var result = await KafkaHelper.SendMessage(_kafkaSettings.Value, "CreateOrderCustomer", key, val);
                     await KafkaHelper.SendMessage(_kafkaSettings.Value, "Logging", key, val);
                 }
                 return Ok(dtoOrderInsert);

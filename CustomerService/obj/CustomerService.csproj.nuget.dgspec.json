@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/faniardelia/Documents/GitHub/Bootcamp_Project_2/CustomerService/CustomerService.csproj": {}
+    "C:\\Users\\Arizal Pratama T A\\Bootcamp_Project_2\\customerservice\\CustomerService.csproj": {}
   },
   "projects": {
-    "/Users/faniardelia/Documents/GitHub/Bootcamp_Project_2/CustomerService/CustomerService.csproj": {
+    "C:\\Users\\Arizal Pratama T A\\Bootcamp_Project_2\\customerservice\\CustomerService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/faniardelia/Documents/GitHub/Bootcamp_Project_2/CustomerService/CustomerService.csproj",
+        "projectUniqueName": "C:\\Users\\Arizal Pratama T A\\Bootcamp_Project_2\\customerservice\\CustomerService.csproj",
         "projectName": "CustomerService",
-        "projectPath": "/Users/faniardelia/Documents/GitHub/Bootcamp_Project_2/CustomerService/CustomerService.csproj",
-        "packagesPath": "/Users/faniardelia/.nuget/packages/",
-        "outputPath": "/Users/faniardelia/Documents/GitHub/Bootcamp_Project_2/CustomerService/obj/",
+        "projectPath": "C:\\Users\\Arizal Pratama T A\\Bootcamp_Project_2\\customerservice\\CustomerService.csproj",
+        "packagesPath": "C:\\Users\\Arizal Pratama T A\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Arizal Pratama T A\\Bootcamp_Project_2\\customerservice\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/faniardelia/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Arizal Pratama T A\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -41,6 +47,10 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[11.0.0, )"
+            },
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[1.8.2, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -91,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.404/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

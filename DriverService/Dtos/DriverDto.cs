@@ -14,6 +14,7 @@ namespace DriverService.Dtos
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public float Balance { get; set; }
+        public bool IsApprove {get; set;}
         public int UserId { get; set; }
     }
 }
