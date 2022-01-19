@@ -30,11 +30,11 @@ namespace OrderService.Data
             throw new NotImplementedException();
         }
 
-        public async Task<double> GetByName(string name)
+        public double GetByName(string name)
         {
-            var result = await _db.Prices.Where(
+            var result = _db.Prices.Where(
                 price => price.Name == name
-            ).SingleOrDefaultAsync();
+            ).SingleOrDefault();
 
             if (result == null) throw new Exception("Price not found");
 

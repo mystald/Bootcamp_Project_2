@@ -35,6 +35,7 @@ namespace OrderService
             );
 
             services.AddScoped<IOrder, DALOrder>();
+            services.AddScoped<IPrice, DALPrice>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -10,10 +10,12 @@ namespace OrderService.Data
     public class DALOrder : IOrder
     {
         private ApplicationDbContext _db;
+        private IPrice _price;
 
-        public DALOrder(ApplicationDbContext db)
+        public DALOrder(ApplicationDbContext db, IPrice price)
         {
             _db = db;
+            _price = price;
         }
 
         public async Task<Order> Delete(int id)
@@ -63,7 +65,9 @@ namespace OrderService.Data
 
         public double GetFeeByDistance(double distance)
         {
-            var fee = Math.Ceiling(distance * 1000);
+            var feePerKM = _price.GetByName("NormalPricePerKM");
+
+            var fee = Math.Ceiling(distance * feePerKM);
 
             return fee % 500 >= 250 ? fee + 500 - fee % 500 : fee - fee % 500;
         }

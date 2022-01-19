@@ -9,6 +9,6 @@ namespace OrderService.Data
     public interface IPrice : ICrud<Price>
     {
         Task<Price> Update(Price obj);
-        Task<double> GetByName(string name);
+        double GetByName(string name);
     }
 }
