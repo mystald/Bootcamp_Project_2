@@ -40,7 +40,7 @@ namespace KafkaListeningAppDriver
                     while (true)
                     {
                         var cr = consumer.Consume(cts.Token);
-                        Console.WriteLine($"Consumed record with key: {cr.Message.Key} and value: {cr.Message.Value}");
+                        Console.WriteLine($"New Order : {cr.Message.Value}");
                     }
                 }
                 catch (OperationCanceledException)
