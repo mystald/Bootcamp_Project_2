@@ -16,7 +16,7 @@ namespace OrderService.Data
             _db = db;
         }
 
-        public double GetByName(string name)
+        public Price GetByName(string name)
         {
             var result = _db.Prices.Where(
                 price => price.Name == name
@@ -24,16 +24,14 @@ namespace OrderService.Data
 
             if (result == null) throw new Exception("Price not found");
 
-            return result.Value;
+            return result;
         }
 
         public async Task<Price> Update(string name, Price obj)
         {
             try
             {
-                var oldCost = await _db.Prices.Where(
-                    price => price.Name == name
-                ).SingleOrDefaultAsync();
+                var oldCost = GetByName(name);
 
                 oldCost.Value = obj.Value;
 

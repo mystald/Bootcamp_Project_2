@@ -9,6 +9,6 @@ namespace OrderService.Data
     public interface IPrice
     {
         Task<Price> Update(string name, Price obj);
-        double GetByName(string name);
+        Price GetByName(string name);
     }
 }
