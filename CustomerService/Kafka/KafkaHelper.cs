@@ -48,7 +48,7 @@ namespace CustomerService.Kafka
             return await Task.FromResult(succeed);
         }
 
-        public static async Task CreateTopic(IConfiguration configuration, string topic)
+        public static void CreateTopic(IConfiguration configuration, string topic)
         {
             var config = new ProducerConfig
             {
@@ -60,7 +60,7 @@ namespace CustomerService.Kafka
             {
                 try
                 {
-                    await adminClient.CreateTopicsAsync(new List<TopicSpecification> {
+                    adminClient.CreateTopicsAsync(new List<TopicSpecification> {
                         new TopicSpecification {
                             Name = topic,
                             NumPartitions = Convert.ToInt32(configuration["KafkaSettings:NumPartitions"]),
