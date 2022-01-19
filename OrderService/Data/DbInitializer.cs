@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OrderService.Models;
 
 namespace OrderService.Data
@@ -10,7 +11,9 @@ namespace OrderService.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            if (!context.Prices.Any())
+            var normalPrice = context.Prices.Where(price => price.Name == "NormalPricePerKM").SingleOrDefault();
+
+            if (normalPrice == null)
             {
                 context.Prices.Add(
                     new Price
