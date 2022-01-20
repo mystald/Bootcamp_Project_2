@@ -56,5 +56,23 @@ namespace AdminService.SyncDataServices.Http
             var value = JsonSerializer.Deserialize<IEnumerable<DriverDto>>(await response.Content.ReadAsByteArrayAsync());
             return value;
         }
+
+        public async Task<IEnumerable<DtoOrderOutput>> GetOrder()
+        {
+            var url = _configuration["OrderService"];
+            var response = await _httpClient.GetAsync($"{url}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync GET to Order Service was OK !");
+            }
+            else
+            {
+                Console.WriteLine("--> Sync GET to Order Service failed");
+                Console.WriteLine(response.StatusCode);
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
+            }
+            var value = JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
+            return value;
+        }
     }
 }

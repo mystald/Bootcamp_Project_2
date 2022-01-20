@@ -41,8 +41,23 @@ namespace AdminService.Controllers
         {
             try
             {
-                var customer = await _dataClient.GetDriver();
-                return Ok(customer);
+                var driver = await _dataClient.GetDriver();
+                return Ok(driver);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Order")]
+        public async Task<ActionResult<IEnumerable<DtoOrderOutput>>> GetOrder()
+        {
+            try
+            {
+                var order = await _dataClient.GetOrder();
+                return Ok(order);
             }
             catch (System.Exception ex)
             {

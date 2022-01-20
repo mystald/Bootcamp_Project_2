@@ -10,5 +10,6 @@ namespace AdminService.SyncDataServices.Http
     {
         Task<IEnumerable<DtoCustomerGet>> GetCustomer();
         Task<IEnumerable<DriverDto>> GetDriver();
+        Task<IEnumerable<DtoOrderOutput>> GetOrder();
     }
 }
