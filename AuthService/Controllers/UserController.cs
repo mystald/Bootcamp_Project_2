@@ -58,5 +58,20 @@ namespace AuthService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("Authentication")]
+        public async Task<ActionResult<ApplicationUser>> Authentication([FromBody] DtoUserCredentials credentials)
+        {
+            try
+            {
+                var user = await _user.Authentication(credentials.Username, credentials.Password);
+
+                return Ok(user);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

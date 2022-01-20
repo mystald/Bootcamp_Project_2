@@ -12,8 +12,9 @@ namespace AuthService.Data
     {
         IEnumerable<ApplicationUser> GetAllUser();
         Task<ApplicationUser> GetByUserId(int userId);
+        Task<IList<string>> GetRolesByUsername(string username);
         Task<ApplicationUser> Insert(DtoUserRegister input);
         Task<ApplicationUser> Update(int userId);
-        Task<string> Authentication(string Username, string Password);
+        Task<string> Authentication(string username, string password);
     }
 }

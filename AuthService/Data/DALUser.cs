@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AuthService.Dto;
 using AuthService.Helper;
 using AuthService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Data
 {
@@ -14,15 +19,56 @@ namespace AuthService.Data
     {
         private ApplicationDbContext _db;
         private UserManager<ApplicationUser> _um;
+        private IConfiguration _config;
 
-        public DALUser(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public DALUser(
+            ApplicationDbContext db,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration config
+        )
         {
             _db = db;
             _um = userManager;
+            _config = config;
         }
-        public Task<string> Authentication(string Username, string Password)
+        public async Task<string> Authentication(string username, string password)
         {
-            throw new NotImplementedException();
+            var user = await _um.FindByNameAsync(username);
+            if (user == null) throw new Exception("Invalid Credentials");
+
+            var userFound = await _um.CheckPasswordAsync(
+                user,
+                password
+            );
+            if (!userFound) throw new Exception("Invalid Credentials");
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, username));
+
+            var roles = await GetRolesByUsername(username);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["AppSettings:Secret"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+
+                Expires = DateTime.UtcNow.AddHours(1),
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature),
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            user.Token = tokenString;
+
+            return tokenString;
         }
 
         public IEnumerable<ApplicationUser> GetAllUser()
@@ -41,6 +87,15 @@ namespace AuthService.Data
             return result;
         }
 
+        public async Task<IList<string>> GetRolesByUsername(string username)
+        {
+            var user = await _um.FindByNameAsync(username);
+
+            var roles = await _um.GetRolesAsync(user);
+
+            return roles;
+        }
+
         public async Task<ApplicationUser> Insert(DtoUserRegister input)
         {
             try
@@ -48,13 +103,12 @@ namespace AuthService.Data
                 var newUser = new ApplicationUser
                 {
                     UserName = input.Username,
-                    PasswordHash = Hash.getHash(input.Password),
                     IsBlocked = false,
                 };
 
-                var result = await _um.CreateAsync(newUser);
+                var result = await _um.CreateAsync(newUser, input.Password);
 
-                if (!result.Succeeded) throw new Exception($"Failed to create user: {result.Errors.ToString()}");
+                if (!result.Succeeded) throw new Exception($"Failed to create user: {result.ToString()}");
 
                 if (input.Role == role.driver)
                 {

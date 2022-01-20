@@ -41,9 +41,9 @@ namespace AuthService
             {
                 // options.Password.RequiredLength = 8;
                 // options.Password.RequireLowercase = true;
-                // options.Password.RequireUppercase = true;
-                // options.Password.RequireNonAlphanumeric = true;
-                // options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
 
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
