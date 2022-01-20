@@ -30,8 +30,13 @@ namespace DriverService.SyncDataService.Http
                 JsonSerializer.Serialize(dri),
                 Encoding.UTF8, "application/json");
 
+<<<<<<< HEAD
             var url = _configuration["OrderService"];
 
+=======
+            var url = _configuration["K8sOrderService"];
+            
+>>>>>>> 2a55c8b... add docker file customer, driver, order, kafka listening app driver change to k8s and azure database
             var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/accept", httpContent);
 
             if (response.IsSuccessStatusCode)
@@ -53,7 +58,7 @@ namespace DriverService.SyncDataService.Http
                 JsonSerializer.Serialize(dri),
                 Encoding.UTF8, "application/json");
 
-            var url = _configuration["OrderService"];
+            var url = _configuration["K8sOrderService"];
 
             var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/finish", httpContent);
 

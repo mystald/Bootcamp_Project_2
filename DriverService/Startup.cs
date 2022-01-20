@@ -39,7 +39,7 @@ namespace DriverService
         {
             //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("")));
+            options.UseSqlServer(Configuration.GetConnectionString("Azure")));
 
             //Interface and DAL
             services.AddScoped<IDriver, DriverDAL>();

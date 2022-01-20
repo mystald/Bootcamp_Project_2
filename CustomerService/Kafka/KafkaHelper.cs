@@ -17,7 +17,7 @@ namespace CustomerService.Kafka
             var succeed = false;
             var config = new ProducerConfig
             {
-                BootstrapServers = configuration["KafkaSettings:Server"],
+                BootstrapServers = configuration["KafkaSettings:K8sKafkaServer"],
                 ClientId = Dns.GetHostName(),
             };
 

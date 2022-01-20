@@ -29,7 +29,7 @@ namespace CustomerService.SyncDataServices.Http
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(insert),
                 Encoding.UTF8, "application/json");
-            var url = _configuration["AppSettings:OrderService"];
+            var url = _configuration["AppSettings:K8sOrderService"];
             var response = await _httpClient.PostAsync($"{url}/fee", httpContent);
             if (response.IsSuccessStatusCode)
             {
@@ -53,7 +53,7 @@ namespace CustomerService.SyncDataServices.Http
                 Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(
-                _configuration["AppSettings:OrderService"],
+                _configuration["AppSettings:K8sOrderService"],
                 httpContent
             );
 
@@ -73,10 +73,7 @@ namespace CustomerService.SyncDataServices.Http
 
         public async Task<IEnumerable<DtoOrderOutput>> GetOrderHistory(int CustomerId)
         {
-            // var httpContent = new StringContent(
-            //     JsonSerializer.Serialize(CustomerId),
-            //     Encoding.UTF8, "application/json");
-            var url = _configuration["AppSettings:OrderService"];
+            var url = _configuration["AppSettings:K8sOrderService"];
             var response = await _httpClient.GetAsync($"{url}/customer/{CustomerId}");
             if (response.IsSuccessStatusCode)
             {
@@ -93,6 +90,4 @@ namespace CustomerService.SyncDataServices.Http
         }
     }
 }
-
-//ni kalo ke local-->"PaymentService":"http://localhost:24183/api/p/enrollments",
 
