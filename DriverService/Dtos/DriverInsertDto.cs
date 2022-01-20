@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace DriverService.Dtos
 {
-    public class DriverDto
+    public class DriverInsertDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

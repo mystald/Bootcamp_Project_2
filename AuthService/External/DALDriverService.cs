@@ -40,6 +40,7 @@ namespace AuthService.External
 
             if (!response.IsSuccessStatusCode)
             {
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
                 throw new System.Exception(response.ToString());
             }
         }

@@ -17,7 +17,7 @@ namespace DriverService.Controllers
     {
         private IDriver _driver;
         private IMapper _mapper;
-         private readonly IOrderDataClient _orderDataClient;
+        private readonly IOrderDataClient _orderDataClient;
         public DriversController(IDriver driver, IMapper mapper, IOrderDataClient orderDataClient)
         {
             _driver = driver ?? throw new ArgumentNullException(nameof(driver));
@@ -102,7 +102,7 @@ namespace DriverService.Controllers
 
 
         //Update Accept Order
-        [HttpPost("AcceptOrder")]   
+        [HttpPost("AcceptOrder")]
         public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
         {
             try
@@ -131,7 +131,7 @@ namespace DriverService.Controllers
         }
 
         //Update Finish Order
-        [HttpPost("FinishOrder")]   
+        [HttpPost("FinishOrder")]
         public async Task<ActionResult<AcceptOrderDto>> FinishAcceptOrder(FinishOrderDto finishOrderDto)
         {
             try
@@ -159,7 +159,19 @@ namespace DriverService.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult<DriverDto>> InsertDriver([FromBody] DriverInsertDto input)
+        {
+            try
+            {
+                var result = await _driver.Insert(_mapper.Map<Driver>(input));
 
-
+                return Ok(_mapper.Map<DriverDto>(result));
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
