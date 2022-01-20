@@ -37,10 +37,6 @@ namespace CustomerService.DAL
 
         public async Task<IEnumerable<Customer>> GetAll()
         {
-            // var results = await (from s in _db.Customers
-            //                      orderby s.FirstName ascending
-            //                      select s).ToListAsync();
-            // return results;
             var results = await _db.Customers.OrderBy(d => d.FirstName).ToListAsync();
             return results;
         }

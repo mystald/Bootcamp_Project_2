@@ -23,6 +23,8 @@ namespace DriverService.Models
         [Required]
         public float Balance { get; set; }
         [Required]
+        public bool IsApprove {get; set;}
+        [Required]
         public int UserId {get; set;}
     }
 }

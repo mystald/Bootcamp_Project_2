@@ -17,8 +17,11 @@ namespace CustomerService.Profiles
                 opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
             CreateMap<GetCustomerForCreateDto, Customer>();
+
+            CreateMap<DtoOrderOutput, DtoOrderForKafka>()
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.id))
+                .ForMember(dest => dest.StartingPoint, opt => opt.MapFrom(src => src.startDest))
+                .ForMember(dest => dest.Destination, opt => opt.MapFrom(src => src.endDest));
         }
-
-
     }
 }

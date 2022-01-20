@@ -15,6 +15,10 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
 using CustomerService.SyncDataServices.Http;
+using CustomerService.Kafka;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace CustomerService.Controllers
 {
@@ -22,19 +26,23 @@ namespace CustomerService.Controllers
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly ICustomer _customer;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IOrderDataClient _dataClient;
 
-        public CustomersController(ICustomer customer, IMapper mapper, IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory, IOrderDataClient dataClient)
+        public CustomersController(ICustomer customer, IMapper mapper,
+        IOptions<AppSettings> appSettings, IHttpClientFactory httpClientFactory,
+        IOrderDataClient dataClient, IConfiguration config)
         {
             _customer = customer ?? throw new ArgumentNullException(nameof(customer));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _appSettings = appSettings.Value;
             _httpClientFactory = httpClientFactory;
             _dataClient = dataClient;
+            configuration = config;
         }
 
         [HttpGet]
@@ -154,36 +162,21 @@ namespace CustomerService.Controllers
             }
         }
 
-
         [HttpPost("Order")]
-        public async Task<ActionResult<GetBalanceDto>> CreateOrder(DtoOrderInsert dtoOrderInsert)
+        public async Task<ActionResult<DtoOrderInsert>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {
             try
             {
                 var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
                 if (result != null)
                 {
-                    // HttpClientHandler clientHandler = new HttpClientHandler();
-                    // clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                    var orderResult = await _dataClient.CreateOrder(dtoOrderInsert);
 
-                    // using (var client = new HttpClient(clientHandler))
-                    // {
-                    //     var json = JsonSerializer.Serialize(dtoOrderInsert);
-                    //     var data = new StringContent(json, Encoding.UTF8, "application/json");
-                    //     var response = await client.PostAsync(_appSettings.OrderService + "/api/v1", data);
-                    //     if (response.IsSuccessStatusCode)
-                    //     {
-                    //         Console.WriteLine("--> Sync POST to Order Service was OK !");
-                    //     }
-                    //     else
-                    //     {
-                    //         Console.WriteLine("--> Sync POST to Order Service failed");
-                    //     }
-                    // }
-
-                    await _dataClient.CreateOrder(dtoOrderInsert);
-
+                    var key = $"NewOrder-{DateTime.Now.ToString()}";
+                    var val = JObject.FromObject(_mapper.Map<DtoOrderForKafka>(orderResult)).ToString(Formatting.None);
+                    await KafkaHelper.SendMessage(configuration, "CreateOrderCustomer", key, val);
                 }
+
                 return Ok(dtoOrderInsert);
             }
             catch (System.Exception ex)
@@ -191,7 +184,6 @@ namespace CustomerService.Controllers
                 Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
-
         }
 
     }

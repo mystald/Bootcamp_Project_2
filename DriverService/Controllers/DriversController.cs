@@ -78,6 +78,28 @@ namespace DriverService.Controllers
             }
         }
 
+        //Accept Driver By Id
+        [HttpPut("AcceptDriver/{id}")]
+        public ActionResult<DriverDto> AcceptDriver(int id, AcceptDriverDto acceptDriverDto)
+        {
+            try
+            {
+                var driverModel = _mapper.Map<Driver>(acceptDriverDto);
+                _driver.AcceptDriver(id, driverModel);
+                _driver.SaveChanges();
+
+                if (acceptDriverDto != null)
+                {
+                    return Ok(acceptDriverDto);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         //Update Accept Order
         [HttpPost("AcceptOrder")]   

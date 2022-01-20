@@ -36,9 +36,9 @@ namespace DriverService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Connection String
+            //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Local")));
+            options.UseSqlServer(Configuration.GetConnectionString("")));
 
             //Interface and DAL
             services.AddScoped<IDriver, DriverDAL>();

@@ -42,24 +42,28 @@ namespace CustomerService.SyncDataServices.Http
 
         }
 
-        public async Task CreateOrder(DtoOrderInsert ins)
+        public async Task<DtoOrderOutput> CreateOrder(DtoOrderInsert ins)
         {
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(ins),
                 Encoding.UTF8, "application/json");
 
+            var response = await _httpClient.PostAsync(
+                _configuration["AppSettings:OrderService"],
+                httpContent
+            );
 
-            var response = await _httpClient.PostAsync(_configuration["AppSettings:OrderService"],
-                httpContent);
+            // TODO delete trace logs
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to Order Service was OK !");
+                return JsonSerializer.Deserialize<DtoOrderOutput>(await response.Content.ReadAsStringAsync());
             }
             else
             {
-                Console.WriteLine(response.Content.ToString());
-                Console.WriteLine(response.StatusCode.ToString());
                 Console.WriteLine("--> Sync POST to Order Service failed");
+                Console.WriteLine(response.StatusCode.ToString());
+                throw new Exception(await response.Content.ReadAsStringAsync());
             }
         }
 

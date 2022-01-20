@@ -72,5 +72,12 @@ namespace DriverService.Data
             return (_db.SaveChanges() >= 0);
         }
 
+        //Accept Driver
+        public void AcceptDriver(int id, Driver obj)
+        {
+             var result = _db.Drivers.FirstOrDefault(p => p.Id == id);
+            result.IsApprove = obj.IsApprove;
+            _db.SaveChanges();
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace DriverService.SyncDataService.Http
                 JsonSerializer.Serialize(dri),
                 Encoding.UTF8, "application/json");
 
-            var url = _configuration["LocalOrderService"];
+            var url = _configuration["OrderService"];
             
             var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/accept", httpContent);
 
@@ -47,7 +47,7 @@ namespace DriverService.SyncDataService.Http
                 JsonSerializer.Serialize(dri),
                 Encoding.UTF8, "application/json");
 
-            var url = _configuration["LocalOrderService"];
+            var url = _configuration["OrderService"];
 
             var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/finish", httpContent);
 

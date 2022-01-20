@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CustomerService.DAL;
 using CustomerService.Data;
 using CustomerService.Helpers;
+using CustomerService.Kafka;
 using CustomerService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -36,8 +37,9 @@ namespace CustomerService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -71,12 +73,9 @@ namespace CustomerService
             });
 
             services.AddScoped<ICustomer, CustomerDAL>();
-            services.AddHttpClient<IOrderDataClient,HttpOrderDataClient>();
+            services.AddHttpClient<IOrderDataClient, HttpOrderDataClient>();
 
-            //services.AddControllers().AddNewtonsoftJson(options =>
-            //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-            //    .AddXmlDataContractSerializerFormatters();
-            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSwaggerGen(c =>
@@ -113,12 +112,14 @@ namespace CustomerService
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Service v1"));
             }
-        
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            KafkaHelper.CreateTopic(Configuration, "CreateOrderCustomer");
 
             app.UseEndpoints(endpoints =>
             {

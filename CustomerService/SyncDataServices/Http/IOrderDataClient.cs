@@ -7,7 +7,7 @@ namespace CustomerService.SyncDataServices.Http
 {
     public interface IOrderDataClient
     {
-        Task CreateOrder(DtoOrderInsert ins);
+        Task<DtoOrderOutput> CreateOrder(DtoOrderInsert ins);
         Task<IEnumerable<DtoOrderOutput>> GetOrderHistory(int CustomerId);
         Task<DtoFeeOutput> CheckFee(DtoFeeInsert insert);
     }

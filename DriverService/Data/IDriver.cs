@@ -13,6 +13,7 @@ namespace DriverService.Data
         void UpdatePosition(int id, Driver obj); 
         void UpdateAcceptOrder(int id, Driver obj);
         void UpdateFinishOrder(int id, Driver obj);
+        void AcceptDriver(int id, Driver obj);
         Task<IEnumerable<Driver>> GetAll();
         Task<Driver> GetBalanceById(string id);
         Task<Driver> GetProfileById(string id);  
