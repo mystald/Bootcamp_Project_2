@@ -10,11 +10,11 @@ namespace AuthService.Data
 {
     public interface IUser
     {
+        Task<string> Authentication(string username, string password);
         IEnumerable<ApplicationUser> GetAllUser();
-        Task<ApplicationUser> GetByUserId(int userId);
+        Task<ApplicationUser> GetByUserId(string userId);
         Task<IList<string>> GetRolesByUsername(string username);
         Task<ApplicationUser> Insert(DtoUserRegister input);
-        Task<ApplicationUser> Update(int userId);
-        Task<string> Authentication(string username, string password);
+        Task<ApplicationUser> Update(string userId, ApplicationUser userObj);
     }
 }

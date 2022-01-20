@@ -73,5 +73,47 @@ namespace AuthService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("Block")]
+        public async Task<ActionResult<ApplicationUser>> BlockUser([FromBody] DtoUserIdInput input)
+        {
+            try
+            {
+                var result = await _user.Update(
+                    input.UserId,
+                    new ApplicationUser
+                    {
+                        IsBlocked = true
+                    }
+                );
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Unblock")]
+        public async Task<ActionResult<ApplicationUser>> UnblockUser([FromBody] DtoUserIdInput input)
+        {
+            try
+            {
+                var result = await _user.Update(
+                    input.UserId,
+                    new ApplicationUser
+                    {
+                        IsBlocked = false
+                    }
+                );
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

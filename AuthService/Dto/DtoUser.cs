@@ -47,6 +47,11 @@ namespace AuthService.Dto
         public string Password { get; set; }
     }
 
+    public class DtoUserIdInput
+    {
+        public string UserId { get; set; }
+    }
+
     public enum role
     {
         driver,

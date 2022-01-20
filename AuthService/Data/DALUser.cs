@@ -42,6 +42,8 @@ namespace AuthService.Data
             );
             if (!userFound) throw new Exception("Invalid Credentials");
 
+            if (user.IsBlocked) throw new Exception("User blocked");
+
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, username));
 
@@ -76,11 +78,9 @@ namespace AuthService.Data
             return _um.Users.ToList();
         }
 
-        public async Task<ApplicationUser> GetByUserId(int userId)
+        public async Task<ApplicationUser> GetByUserId(string userId)
         {
-            var result = await _db.Users.Where(
-                user => user.Id == userId.ToString()
-            ).SingleOrDefaultAsync();
+            var result = await _um.FindByIdAsync(userId);
 
             if (result == null) throw new Exception("User not found");
 
@@ -152,9 +152,31 @@ namespace AuthService.Data
             }
         }
 
-        public Task<ApplicationUser> Update(int userId)
+        public async Task<ApplicationUser> Update(string userId, ApplicationUser userObj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var oldUser = await GetByUserId(userId);
+
+                if (userObj.UserName != null)
+                {
+                    oldUser.UserName = userObj.UserName;
+                    oldUser.PasswordHash = userObj.PasswordHash;
+                }
+                else
+                {
+                    oldUser.IsBlocked = userObj.IsBlocked;
+                }
+
+                var result = await _um.UpdateAsync(oldUser);
+                if (!result.Succeeded) throw new Exception(result.ToString());
+
+                return oldUser;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }
