@@ -23,9 +23,8 @@ namespace CustomerService.Models
 
         [Required]
         public double Balance { get; set; }
-        
-        public int? UserId {get; set;}
 
-        
+        public string UserId { get; set; }
+
     }
 }

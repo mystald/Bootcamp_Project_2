@@ -19,7 +19,7 @@ namespace CustomerService.Data
 
             var customers = new Customer[]
             {
-                new Customer{FirstName="Spongebob",LastName="Squarepants",BirthDate=DateTime.Parse("1999-01-01"),Balance=5000,UserId=1},
+                new Customer{FirstName="Spongebob",LastName="Squarepants",BirthDate=DateTime.Parse("1999-01-01"),Balance=5000},
             };
 
             foreach (var c in customers)

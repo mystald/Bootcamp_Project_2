@@ -65,8 +65,8 @@ namespace AuthService
                 });
 
             services.AddScoped<IUser, DALUser>();
-            services.AddScoped<ICustomerService, DALCustomerService>();
-            services.AddScoped<IDriverService, DALDriverService>();
+            services.AddHttpClient<ICustomerService, DALCustomerService>();
+            services.AddHttpClient<IDriverService, DALDriverService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

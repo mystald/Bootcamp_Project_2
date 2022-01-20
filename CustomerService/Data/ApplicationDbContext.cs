@@ -8,7 +8,7 @@ using CustomerService.Models;
 
 namespace CustomerService.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -16,6 +16,4 @@ namespace CustomerService.Data
 
         public DbSet<Customer> Customers { get; set; }
     }
-
-    
 }
