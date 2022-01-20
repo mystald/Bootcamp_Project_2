@@ -57,4 +57,10 @@ namespace AuthService.Dto
         driver,
         customer,
     }
+
+    public enum status
+    {
+        block,
+        unblock,
+    }
 }
