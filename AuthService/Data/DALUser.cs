@@ -6,20 +6,28 @@ using System.Threading.Tasks;
 using AuthService.Dto;
 using AuthService.Helper;
 using AuthService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Data
 {
     public class DALUser : IUser
     {
         private ApplicationDbContext _db;
+        private UserManager<ApplicationUser> _um;
 
-        public DALUser(ApplicationDbContext db)
+        public DALUser(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
+            _um = userManager;
         }
         public Task<string> Authentication(string Username, string Password)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<ApplicationUser> GetAllUser()
+        {
+            return _um.Users.ToList();
         }
 
         public async Task<ApplicationUser> GetByUserId(int userId)
@@ -44,9 +52,9 @@ namespace AuthService.Data
                     IsBlocked = false,
                 };
 
-                var addedUser = await _db.Users.AddAsync(newUser);
+                var result = await _um.CreateAsync(newUser);
 
-                await _db.SaveChangesAsync();
+                if (!result.Succeeded) throw new Exception($"Failed to create user: {result.Errors.ToString()}");
 
                 if (input.Role == role.driver)
                 {
@@ -59,10 +67,12 @@ namespace AuthService.Data
                         Longitude = 0,
                         Balance = 0,
                         IsApprove = false,
-                        UserId = addedUser.Entity.Id,
+                        UserId = newUser.Id
                     };
 
                     // TODO Send InsertDriver Request to DriverService
+
+                    await _um.AddToRoleAsync(newUser, "Driver");
                 }
                 else if (input.Role == role.customer)
                 {
@@ -72,13 +82,15 @@ namespace AuthService.Data
                         LastName = input.LastName,
                         BirthDate = input.BirthDate,
                         Balance = 0,
-                        UserId = addedUser.Entity.Id,
+                        UserId = newUser.Id,
                     };
 
                     // TODO Send InsertCustomer Request to CustomerService
+
+                    await _um.AddToRoleAsync(newUser, "Customer");
                 }
 
-                return addedUser.Entity;
+                return newUser;
             }
             catch (System.Exception)
             {

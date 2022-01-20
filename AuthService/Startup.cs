@@ -37,7 +37,7 @@ namespace AuthService
                 opt => opt.UseSqlServer(Configuration.GetConnectionString("LocalDB"))
             );
 
-            services.AddIdentityCore<IdentityUser>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 // options.Password.RequiredLength = 8;
                 // options.Password.RequireLowercase = true;
@@ -63,6 +63,10 @@ namespace AuthService
                     };
                 });
 
+            services.AddScoped<IUser, DALUser>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -71,7 +75,7 @@ namespace AuthService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -88,7 +92,7 @@ namespace AuthService
 
             app.UseAuthorization();
 
-            DbInitializer.Seed(app.ApplicationServices);
+            RoleInitializer.Seed(serviceProvider).Wait();
 
             app.UseEndpoints(endpoints =>
             {
