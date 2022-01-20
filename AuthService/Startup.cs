@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AuthService.Data;
+using AuthService.External;
 using AuthService.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -64,6 +65,8 @@ namespace AuthService
                 });
 
             services.AddScoped<IUser, DALUser>();
+            services.AddScoped<ICustomerService, DALCustomerService>();
+            services.AddScoped<IDriverService, DALDriverService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

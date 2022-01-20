@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AuthService.Dto;
+using AuthService.External;
 using AuthService.Helper;
 using AuthService.Models;
 using Microsoft.AspNetCore.Identity;
@@ -20,16 +21,22 @@ namespace AuthService.Data
         private ApplicationDbContext _db;
         private UserManager<ApplicationUser> _um;
         private IConfiguration _config;
+        private ICustomerService _customer;
+        private IDriverService _driver;
 
         public DALUser(
             ApplicationDbContext db,
             UserManager<ApplicationUser> userManager,
-            IConfiguration config
+            IConfiguration config,
+            ICustomerService customer,
+            IDriverService driver
         )
         {
             _db = db;
             _um = userManager;
             _config = config;
+            _customer = customer;
+            _driver = driver;
         }
         public async Task<string> Authentication(string username, string password)
         {
@@ -124,7 +131,7 @@ namespace AuthService.Data
                         UserId = newUser.Id
                     };
 
-                    // TODO Send InsertDriver Request to DriverService
+                    await _driver.InsertDriver(newDriver);
 
                     await _um.AddToRoleAsync(newUser, "Driver");
                 }
@@ -139,7 +146,7 @@ namespace AuthService.Data
                         UserId = newUser.Id,
                     };
 
-                    // TODO Send InsertCustomer Request to CustomerService
+                    await _customer.InsertCustomer(newCust);
 
                     await _um.AddToRoleAsync(newUser, "Customer");
                 }
