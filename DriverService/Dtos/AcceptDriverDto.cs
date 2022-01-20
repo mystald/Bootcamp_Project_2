@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace DriverService.Dtos
 {
-    public class GetDriverBalanceDto
+    public class AcceptDriverDto
     {
-        public string Name { get; set; }
-        public float Balance { get; set; }
+        public bool IsApprove {get; set;}
     }
 }
