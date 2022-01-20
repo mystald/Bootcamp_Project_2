@@ -19,7 +19,7 @@ namespace AdminService.Dtos
 
     public class location
     {
-        public double Lat { get; set; }
-        public double Long { get; set; }
+        public double lat { get; set; }
+        public double @long { get; set; }
     }
 }
