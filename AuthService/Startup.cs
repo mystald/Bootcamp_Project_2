@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AuthService.Data;
 using AuthService.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -86,6 +87,8 @@ namespace AuthService
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            DbInitializer.Seed(app.ApplicationServices);
 
             app.UseEndpoints(endpoints =>
             {
