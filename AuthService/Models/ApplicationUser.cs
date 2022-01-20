@@ -8,7 +8,7 @@ namespace AuthService.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public bool IsBlocked { get; set; }
+        public bool IsBlocked { get; set; } // TODO Set default as False
         public string Token { get; set; }
     }
 }
