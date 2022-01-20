@@ -65,5 +65,35 @@ namespace AdminService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("ApproveDriver")]
+        public async Task<ActionResult<AcceptDriverReturn>> ApproveDriver(AcceptDriverDto insert)
+        {
+            try
+            {
+                var acc = await _dataClient.ApproveDriver(insert);
+                return Ok(acc);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Price")]
+        public async Task<ActionResult<DtoPrice>> SetPrice(DtoPrice insert)
+        {
+            try
+            {
+                var price = await _dataClient.SetPrice(insert);
+                return Ok(price);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

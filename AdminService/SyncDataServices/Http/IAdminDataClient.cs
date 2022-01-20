@@ -11,5 +11,7 @@ namespace AdminService.SyncDataServices.Http
         Task<IEnumerable<DtoCustomerGet>> GetCustomer();
         Task<IEnumerable<DriverDto>> GetDriver();
         Task<IEnumerable<DtoOrderOutput>> GetOrder();
+        Task<AcceptDriverReturn> ApproveDriver(AcceptDriverDto insert);
+        Task<DtoPrice> SetPrice(DtoPrice insert);
     }
 }
