@@ -34,6 +34,17 @@ namespace DriverService.Controllers
             return Ok(dtos);
         }
 
+         //Get Driver By Id
+        [HttpGet("GetDriverById/{id}")]
+        public async Task<ActionResult<DriverDto>> GetDriverById(int id)
+        {
+            var result = await _driver.GetById(id.ToString());
+            if (result == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<DriverDto>(result));
+        }
+
         //Get Balance Driver By Id
         [HttpGet("GetBalance/{id}")]
         public async Task<ActionResult<GetDriverBalanceDto>> GetBalance(int id)
@@ -100,7 +111,6 @@ namespace DriverService.Controllers
             }
         }
 
-
         //Update Accept Order
         [HttpPost("AcceptOrder")]
         public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
@@ -161,6 +171,7 @@ namespace DriverService.Controllers
             }
         }
 
+        //Insert Driver
         [HttpPost]
         public async Task<ActionResult<DriverDto>> InsertDriver([FromBody] DriverInsertDto input)
         {
@@ -175,5 +186,7 @@ namespace DriverService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+       
     }
 }
