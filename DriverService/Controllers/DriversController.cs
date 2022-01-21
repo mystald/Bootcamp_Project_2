@@ -35,7 +35,7 @@ namespace DriverService.Controllers
         }
 
          //Get Driver By Id
-        [HttpGet("GetDriverById/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<DriverDto>> GetDriverById(int id)
         {
             var result = await _driver.GetById(id.ToString());
@@ -46,7 +46,7 @@ namespace DriverService.Controllers
         }
 
         //Get Balance Driver By Id
-        [HttpGet("GetBalance/{id}")]
+        [HttpGet("{id}/Balance")]
         public async Task<ActionResult<GetDriverBalanceDto>> GetBalance(int id)
         {
             var result = await _driver.GetBalanceById(id.ToString());
@@ -57,7 +57,7 @@ namespace DriverService.Controllers
         }
 
         //Get Profile Driver By Id
-        [HttpGet("GetProfile/{id}")]
+        [HttpGet("{id}/Profile")]
         public async Task<ActionResult<GetDriverProfileDto>> GetProfile(int id)
         {
             var result = await _driver.GetProfileById(id.ToString());
@@ -68,7 +68,7 @@ namespace DriverService.Controllers
         }
 
         //Update Position Driver By Id
-        [HttpPut("UpdatePosition/{id}")]
+        [HttpPut("{id}/Position")]
         public ActionResult<DriverDto> UpdatePosition(int id, UpdateForPositionDto updateForPositionDto)
         {
             try
@@ -90,7 +90,7 @@ namespace DriverService.Controllers
         }
 
         //Accept Driver By Id
-        [HttpPut("AcceptDriver/{id}")]
+        [HttpPatch("{id}/Approve")]
         public ActionResult<DriverDto> AcceptDriver(int id, AcceptDriverDto acceptDriverDto)
         {
             try
@@ -112,7 +112,7 @@ namespace DriverService.Controllers
         }
 
         //Update Accept Order
-        [HttpPost("AcceptOrder")]
+        [HttpPost("Order/Accept")]
         public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
         {
             try
@@ -142,7 +142,7 @@ namespace DriverService.Controllers
         }
 
         //Update Finish Order
-        [HttpPost("FinishOrder")]
+        [HttpPost("Order/Finish")]
         public async Task<ActionResult<AcceptOrderDto>> FinishAcceptOrder(FinishOrderDto finishOrderDto)
         {
             try
