@@ -95,5 +95,15 @@ namespace DriverService.Data
                 throw new Exception($"Error: {dbEx.Message}");
             }
         }
+
+        //Get Driver By Id
+        public async Task<Driver> GetById(string id)
+        {
+            var result = await _db.Drivers.Where(s => s.Id == Convert.ToInt32(id)).SingleOrDefaultAsync<Driver>();
+            if (result != null)
+                return result;
+            else
+                throw new Exception("Data tidak ditemukan !");
+        }
     }
 }
