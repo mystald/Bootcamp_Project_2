@@ -105,5 +105,17 @@ namespace DriverService.Data
             else
                 throw new Exception("Data tidak ditemukan !");
         }
+
+        //Add Balance When Finish
+        public async Task<Driver> AddBalanceWhenFinish(int driverId, double addBalance)
+        {
+            var result = _db.Drivers.FirstOrDefault(p => p.Id == driverId);
+            result.Balance += addBalance;
+            await _db.SaveChangesAsync();
+            Console.WriteLine(result.Balance);
+            Console.WriteLine(addBalance);
+            Console.WriteLine(result.Balance += addBalance);
+            return result;
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace DriverService.SyncDataService.Http
 {
     public interface IOrderDataClient
     {
-        Task SendDriverToOderForAccept (AcceptOrderDto dri);
-        Task SendDriverToOderForFinish (FinishOrderDto dri);
+        Task<OrderDto> SendDriverToOderForAccept (AcceptOrderDto dri);
+        Task<OrderDto> SendDriverToOderForFinish(FinishOrderDto dri);
     }
 }

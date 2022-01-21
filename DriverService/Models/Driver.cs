@@ -21,7 +21,7 @@ namespace DriverService.Models
         [Required]
         public double Longitude { get; set; }
         [Required]
-        public float Balance { get; set; }
+        public double Balance { get; set; }
         [Required]
         public bool IsApprove { get; set; }
         public string UserId { get; set; }
