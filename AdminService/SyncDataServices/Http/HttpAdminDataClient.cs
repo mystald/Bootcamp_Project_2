@@ -114,7 +114,7 @@ namespace AdminService.SyncDataServices.Http
                 JsonSerializer.Serialize(insert),
                 Encoding.UTF8, "application/json");
             var url = _configuration["DriverService"];
-            var response = await _httpClient.PutAsync($"{url}/AcceptDriver/{insert.driverId}", httpContent);
+            var response = await _httpClient.PatchAsync($"{url}/{insert.driverId}/Approve", httpContent);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync PUT to Driver Service was OK !");
