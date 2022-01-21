@@ -11,5 +11,6 @@ namespace CustomerService.Dtos
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
         public double Balance { get; set; }
+        public string UserId { get; set; }
     }
 }

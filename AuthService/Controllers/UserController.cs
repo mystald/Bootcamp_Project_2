@@ -92,7 +92,7 @@ namespace AuthService.Controllers
                     }
                 );
 
-                return Ok(result);
+                return Ok(result.IsBlocked);
             }
             catch (System.Exception ex)
             {

@@ -27,16 +27,33 @@ namespace AdminService.SyncDataServices.Http
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync GET to Customer Service was OK !");
+                return JsonSerializer.Deserialize<IEnumerable<DtoCustomerGet>>(await response.Content.ReadAsByteArrayAsync());
             }
             else
             {
                 Console.WriteLine("--> Sync GET to Customer Service failed");
                 Console.WriteLine(response.StatusCode);
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                throw new Exception(await response.Content.ReadAsStringAsync());
 
             }
-            var value = JsonSerializer.Deserialize<IEnumerable<DtoCustomerGet>>(await response.Content.ReadAsByteArrayAsync());
-            return value;
+        }
+
+        public async Task<DtoCustomerGet> GetCustomerById(int id)
+        {
+            var url = _configuration["CustomerService"];
+            var response = await _httpClient.GetAsync($"{url}/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync GET to Customer Service was OK !");
+                return JsonSerializer.Deserialize<DtoCustomerGet>(await response.Content.ReadAsByteArrayAsync());
+            }
+            else
+            {
+                Console.WriteLine("--> Sync GET to Customer Service failed");
+                Console.WriteLine(response.StatusCode);
+                throw new Exception(await response.Content.ReadAsStringAsync());
+
+            }
         }
 
         public async Task<IEnumerable<DriverDto>> GetDriver()
@@ -46,15 +63,32 @@ namespace AdminService.SyncDataServices.Http
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync GET to Driver Service was OK !");
+                return JsonSerializer.Deserialize<IEnumerable<DriverDto>>(await response.Content.ReadAsByteArrayAsync());
             }
             else
             {
                 Console.WriteLine("--> Sync GET to Driver Service failed");
                 Console.WriteLine(response.StatusCode);
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                throw new Exception(await response.Content.ReadAsStringAsync());
             }
-            var value = JsonSerializer.Deserialize<IEnumerable<DriverDto>>(await response.Content.ReadAsByteArrayAsync());
-            return value;
+        }
+
+        public async Task<DriverDto> GetDriverById(int id)
+        {
+            var url = _configuration["DriverService"];
+            var response = await _httpClient.GetAsync($"{url}/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync GET to Driver Service was OK !");
+                return JsonSerializer.Deserialize<DriverDto>(await response.Content.ReadAsByteArrayAsync());
+            }
+            else
+            {
+                Console.WriteLine("--> Sync GET to Driver Service failed");
+                Console.WriteLine(response.StatusCode);
+                throw new Exception(await response.Content.ReadAsStringAsync());
+
+            }
         }
 
         public async Task<IEnumerable<DtoOrderOutput>> GetOrder()
@@ -64,15 +98,14 @@ namespace AdminService.SyncDataServices.Http
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync GET to Order Service was OK !");
+                return JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
             }
             else
             {
                 Console.WriteLine("--> Sync GET to Order Service failed");
                 Console.WriteLine(response.StatusCode);
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
+                throw new Exception(await response.Content.ReadAsStringAsync());
             }
-            var value = JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
-            return value;
         }
 
         public async Task<AcceptDriverReturn> ApproveDriver(AcceptDriverDto insert)
@@ -110,6 +143,86 @@ namespace AdminService.SyncDataServices.Http
             else
             {
                 Console.WriteLine("--> Sync POST to Order Service failed");
+                Console.WriteLine(response.StatusCode.ToString());
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<string> BlockCustomer(string userId)
+        {
+            var httpContent = new StringContent(
+                "",
+                Encoding.UTF8, "application/json");
+            var url = _configuration["AuthService"];
+            var response = await _httpClient.PatchAsync($"{url}/{userId}/block", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service was OK !");
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service failed");
+                Console.WriteLine(response.StatusCode.ToString());
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<string> UnblockCustomer(string userId)
+        {
+            var httpContent = new StringContent(
+                "",
+                Encoding.UTF8, "application/json");
+            var url = _configuration["AuthService"];
+            var response = await _httpClient.PatchAsync($"{url}/{userId}/unblock", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service was OK !");
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service failed");
+                Console.WriteLine(response.StatusCode.ToString());
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<string> BlockDriver(string userId)
+        {
+            var httpContent = new StringContent(
+                "",
+                Encoding.UTF8, "application/json");
+            var url = _configuration["AuthService"];
+            var response = await _httpClient.PatchAsync($"{url}/{userId}/block", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service was OK !");
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service failed");
+                Console.WriteLine(response.StatusCode.ToString());
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<string> UnblockDriver(string userId)
+        {
+            var httpContent = new StringContent(
+                "",
+                Encoding.UTF8, "application/json");
+            var url = _configuration["AuthService"];
+            var response = await _httpClient.PatchAsync($"{url}/{userId}/unblock", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service was OK !");
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PATCH to Auth Service failed");
                 Console.WriteLine(response.StatusCode.ToString());
                 throw new Exception(await response.Content.ReadAsStringAsync());
             }

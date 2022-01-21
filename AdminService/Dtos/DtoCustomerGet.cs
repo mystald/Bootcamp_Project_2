@@ -11,5 +11,6 @@ namespace AdminService.Dtos
         public string name { get; set; }
         public DateTime birthDate { get; set; }
         public double balance { get; set; }
+        public string userId { get; set; }
     }
 }

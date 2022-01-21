@@ -36,12 +36,42 @@ namespace AdminService.Controllers
             }
         }
 
+        [HttpGet("Customer/{id}")]
+        public async Task<ActionResult<DtoCustomerGet>> GetCustomerById(int id)
+        {
+            try
+            {
+                var customer = await _dataClient.GetCustomerById(id);
+                return Ok(customer);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("Driver")]
         public async Task<ActionResult<IEnumerable<DriverDto>>> GetDriver()
         {
             try
             {
                 var driver = await _dataClient.GetDriver();
+                return Ok(driver);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Driver/{id}")]
+        public async Task<ActionResult<DriverDto>> GetDriverById(int id)
+        {
+            try
+            {
+                var driver = await _dataClient.GetDriverById(id);
                 return Ok(driver);
             }
             catch (System.Exception ex)
@@ -95,5 +125,71 @@ namespace AdminService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPatch("Customer/{id}/Block")]
+        public async Task<ActionResult<DtoCustomerGet>> BlockCustomer(int id)
+        {
+            try
+            {
+                var customer = await _dataClient.GetCustomerById(id);
+                var block = await _dataClient.BlockCustomer(customer.userId);
+                return Ok(block);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("Customer/{id}/Unblock")]
+        public async Task<ActionResult<DtoCustomerGet>> UnblockCustomer(int id)
+        {
+            try
+            {
+                var customer = await _dataClient.GetCustomerById(id);
+                var unblock = await _dataClient.UnblockCustomer(customer.userId);
+                return Ok(unblock);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("Driver/{id}/Block")]
+        public async Task<ActionResult<DriverDto>> BlockDriver(int id)
+        {
+            try
+            {
+                var driver = await _dataClient.GetDriverById(id);
+                var block = await _dataClient.BlockCustomer(driver.userId);
+                return Ok(block);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("Driver/{id}/Unblock")]
+        public async Task<ActionResult<DriverDto>> UnblockDriver(int id)
+        {
+            try
+            {
+                var driver = await _dataClient.GetDriverById(id);
+                var unblock = await _dataClient.UnblockDriver(driver.userId);
+                return Ok(unblock);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+    
     }
 }
