@@ -57,7 +57,19 @@ namespace DriverService.Data
         //Update Accept Order -> Communication with Order Service
         public void UpdateAcceptOrder(int id, Driver obj)
         {
+
             throw new NotImplementedException();
+            // try
+            // {
+            //     var result = _db.Drivers.FirstOrDefault(p => p.Id == id);
+
+            //     if (obj.IsApprove == false)
+            //     Console.WriteLine(" Status driver belum di approve ");
+            // }
+            // catch (System.Exception)
+            // {
+            //     throw;
+            // }
         }
 
         //Update Finish Order -> Communication with Order Service
