@@ -59,17 +59,6 @@ namespace DriverService.Data
         {
 
             throw new NotImplementedException();
-            // try
-            // {
-            //     var result = _db.Drivers.FirstOrDefault(p => p.Id == id);
-
-            //     if (obj.IsApprove == false)
-            //     Console.WriteLine(" Status driver belum di approve ");
-            // }
-            // catch (System.Exception)
-            // {
-            //     throw;
-            // }
         }
 
         //Update Finish Order -> Communication with Order Service
@@ -92,6 +81,7 @@ namespace DriverService.Data
             _db.SaveChanges();
         }
 
+        //Insert Driver
         public async Task<Driver> Insert(Driver obj)
         {
             try
