@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DriverService.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

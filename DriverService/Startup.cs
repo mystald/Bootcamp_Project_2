@@ -31,7 +31,8 @@ namespace DriverService
             Configuration = configuration;
             _env = env;
         }
-        public IConfiguration Configuration { get; } 
+
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -53,17 +54,7 @@ namespace DriverService
 
             //AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddControllers(); 
-
-            //Identity framework security
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireDigit = true;
-            }).AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddControllers();
 
             //JWT Bearer
             var appSettingsSection = Configuration.GetSection("AppSettings");

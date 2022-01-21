@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DriverService.Dtos
+namespace AuthService.Dto
 {
-    public class DriverDto
+    public class DtoDriver
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
