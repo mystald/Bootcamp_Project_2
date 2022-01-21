@@ -121,7 +121,7 @@ namespace DriverService.Controllers
                 
                 if (driverGetById != null)
                 {
-                    if(driverGetById.IsApprove == false) return BadRequest();
+                    if(driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
                     //send sync communication
                     try
                     {
@@ -151,7 +151,7 @@ namespace DriverService.Controllers
 
                 if (driverGetById != null)
                 {
-                    if(driverGetById.IsApprove == false) return BadRequest();
+                    if(driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
                     //send sync communication
                     try
                     {

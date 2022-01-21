@@ -47,16 +47,6 @@ namespace OrderService
 
             services.AddControllers();
 
-            //Identity framework security
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireDigit = true;
-            }).AddDefaultTokenProviders().AddEntityFrameworkStores<ApplicationDbContext>();
-
             //JWT Bearer
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
