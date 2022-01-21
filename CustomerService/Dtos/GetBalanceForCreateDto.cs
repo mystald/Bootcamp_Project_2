@@ -7,8 +7,6 @@ namespace CustomerService.Dtos
 {
     public class GetBalanceForCreateDto
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public double Balance { get; set; }
     }
 }

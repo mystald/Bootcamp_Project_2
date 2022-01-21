@@ -82,5 +82,21 @@ namespace CustomerService.DAL
                 throw new Exception($"Error: {dbEx.Message}");
             }
         }
+
+        public async Task<Customer> TopUp(string id, Customer obj)
+         {
+            var result = await GetById(id);
+            result.Balance += obj.Balance;
+            await _db.SaveChangesAsync();
+            return result;
+        }
+
+        public async Task<Customer> DeductBalanceWhenInsert(int customerId, double fee)
+        {
+            var result = _db.Customers.FirstOrDefault(p => p.Id == customerId);
+            result.Balance -= fee;
+            await _db.SaveChangesAsync();
+            return result;
+        }
     }
 }

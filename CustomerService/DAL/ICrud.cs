@@ -12,5 +12,6 @@ namespace CustomerService.DAL
         Task<T> Insert(T obj);
         Task<T> Update(string id, T obj);
         Task Delete(string id);
+        
     }
 }
