@@ -57,6 +57,7 @@ namespace DriverService.Data
         //Update Accept Order -> Communication with Order Service
         public void UpdateAcceptOrder(int id, Driver obj)
         {
+
             throw new NotImplementedException();
         }
 
@@ -80,6 +81,7 @@ namespace DriverService.Data
             _db.SaveChanges();
         }
 
+        //Insert Driver
         public async Task<Driver> Insert(Driver obj)
         {
             try

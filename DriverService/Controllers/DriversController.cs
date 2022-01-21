@@ -107,10 +107,11 @@ namespace DriverService.Controllers
         {
             try
             {
-                var driverGetById = _driver.GetProfileById(acceptOrderDto.DriverId.ToString());
-
+                var driverGetById = await _driver.GetProfileById(acceptOrderDto.DriverId.ToString());
+                
                 if (driverGetById != null)
                 {
+                    if(driverGetById.IsApprove == false) return BadRequest();
                     //send sync communication
                     try
                     {
@@ -136,10 +137,11 @@ namespace DriverService.Controllers
         {
             try
             {
-                var driverGetById = _driver.GetProfileById(finishOrderDto.DriverId.ToString());
+                var driverGetById = await _driver.GetProfileById(finishOrderDto.DriverId.ToString());
 
                 if (driverGetById != null)
                 {
+                    if(driverGetById.IsApprove == false) return BadRequest();
                     //send sync communication
                     try
                     {
