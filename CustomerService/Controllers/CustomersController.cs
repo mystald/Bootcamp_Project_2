@@ -22,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CustomerService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
@@ -45,6 +46,7 @@ namespace CustomerService.Controllers
             configuration = config;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCustomerDto>>> GetAllCustomer()
         {
@@ -53,6 +55,7 @@ namespace CustomerService.Controllers
             return Ok(dtos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCustomerDto>> GetCustomerById(int id)
         {
@@ -63,6 +66,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetCustomerDto>(result));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<GetCustomerDto>> Post([FromBody] GetCustomerForCreateDto getCustomerForCreateDto)
         {
