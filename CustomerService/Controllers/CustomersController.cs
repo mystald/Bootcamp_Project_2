@@ -117,7 +117,7 @@ namespace CustomerService.Controllers
             try
             {
                 var customer = _mapper.Map<Customer>(getBalanceForCreateDto);
-                var result = await _customer.Update(id.ToString(), customer);
+                var result = await _customer.TopUp(id.ToString(), customer);
                 var customerdto = _mapper.Map<GetBalanceDto>(result);
                 return Ok(customerdto);
             }
@@ -170,7 +170,15 @@ namespace CustomerService.Controllers
                 var result = await _customer.GetById(dtoOrderInsert.CustomerId.ToString());
                 if (result != null)
                 {
+                    var fee = await _dataClient.CheckFee(
+                        new DtoFeeInsert{
+                            StartDest = dtoOrderInsert.startDest,
+                            EndDest = dtoOrderInsert.endDest                      
+                        }
+                    );
+                    if (result.Balance < fee.fee) return BadRequest("Saldo tidak cukup");
                     var orderResult = await _dataClient.CreateOrder(dtoOrderInsert);
+                    await _customer.DeductBalanceWhenInsert(result.Id, orderResult.fee);
 
                     var key = $"NewOrder-{DateTime.Now.ToString()}";
                     var val = JObject.FromObject(_mapper.Map<DtoOrderForKafka>(orderResult)).ToString(Formatting.None);
