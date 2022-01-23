@@ -119,36 +119,52 @@ namespace AuthService.Data
 
                 if (input.Role == role.driver)
                 {
-                    var newDriver = new DtoDriver
+                    try
                     {
-                        FirstName = input.FirstName,
-                        LastName = input.LastName,
-                        BirthDate = input.BirthDate,
-                        Latitude = 0,
-                        Longitude = 0,
-                        Balance = 0,
-                        IsApprove = false,
-                        UserId = newUser.Id
-                    };
+                        var newDriver = new DtoDriver
+                        {
+                            FirstName = input.FirstName,
+                            LastName = input.LastName,
+                            BirthDate = input.BirthDate,
+                            Latitude = 0,
+                            Longitude = 0,
+                            Balance = 0,
+                            IsApprove = false,
+                            UserId = newUser.Id
+                        };
 
-                    await _driver.InsertDriver(newDriver);
+                        await _driver.InsertDriver(newDriver);
 
-                    await _um.AddToRoleAsync(newUser, "Driver");
+                        await _um.AddToRoleAsync(newUser, "Driver");
+                    }
+                    catch (System.Exception)
+                    {
+                        await _um.DeleteAsync(newUser);
+                        throw;
+                    }
                 }
                 else if (input.Role == role.customer)
                 {
-                    var newCust = new DtoCustomer
+                    try
                     {
-                        FirstName = input.FirstName,
-                        LastName = input.LastName,
-                        BirthDate = input.BirthDate,
-                        Balance = 0,
-                        UserId = newUser.Id,
-                    };
+                        var newCust = new DtoCustomer
+                        {
+                            FirstName = input.FirstName,
+                            LastName = input.LastName,
+                            BirthDate = input.BirthDate,
+                            Balance = 0,
+                            UserId = newUser.Id,
+                        };
 
-                    await _customer.InsertCustomer(newCust);
+                        await _customer.InsertCustomer(newCust);
 
-                    await _um.AddToRoleAsync(newUser, "Customer");
+                        await _um.AddToRoleAsync(newUser, "Customer");
+                    }
+                    catch (System.Exception)
+                    {
+                        await _um.DeleteAsync(newUser);
+                        throw;
+                    }
                 }
 
                 return newUser;
