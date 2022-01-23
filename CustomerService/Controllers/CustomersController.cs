@@ -175,9 +175,10 @@ namespace CustomerService.Controllers
                 if (result != null)
                 {
                     var fee = await _dataClient.CheckFee(
-                        new DtoFeeInsert{
+                        new DtoFeeInsert
+                        {
                             StartDest = dtoOrderInsert.startDest,
-                            EndDest = dtoOrderInsert.endDest                      
+                            EndDest = dtoOrderInsert.endDest
                         }
                     );
                     if (result.Balance < fee.fee) return BadRequest("Saldo tidak cukup");
