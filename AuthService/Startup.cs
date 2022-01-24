@@ -35,7 +35,7 @@ namespace AuthService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString(""))
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("Db"))
             );
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

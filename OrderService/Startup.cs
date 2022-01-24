@@ -36,7 +36,7 @@ namespace OrderService
         {
             //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Azure"),
+                options.UseSqlServer(Configuration.GetConnectionString("Db"),
                 x => x.UseNetTopologySuite())
             );
 
