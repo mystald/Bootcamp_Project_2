@@ -11,6 +11,7 @@ namespace AuthService.Data
     public interface IUser
     {
         Task<string> Authentication(string username, string password);
+        string GenerateServiceToken(string role);
         IEnumerable<ApplicationUser> GetAllUser();
         Task<ApplicationUser> GetByUserId(string userId);
         Task<IList<string>> GetRolesByUsername(string username);

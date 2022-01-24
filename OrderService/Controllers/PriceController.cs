@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Data;
 using OrderService.Dto;
@@ -9,6 +10,7 @@ using OrderService.Models;
 
 namespace OrderService.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class PriceController : ControllerBase

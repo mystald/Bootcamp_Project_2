@@ -14,6 +14,8 @@ namespace AuthService.Data
         {
             var roleManager = service.GetService<RoleManager<IdentityRole>>();
 
+            var userManager = service.GetService<UserManager<ApplicationUser>>();
+
             if (!roleManager.Roles.Any())
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -21,6 +23,15 @@ namespace AuthService.Data
                 await roleManager.CreateAsync(new IdentityRole("Driver"));
 
                 await roleManager.CreateAsync(new IdentityRole("Customer"));
+
+                var newAdmin = new ApplicationUser
+                {
+                    UserName = "admin",
+                };
+
+                await userManager.CreateAsync(newAdmin, "password");
+
+                await userManager.AddToRoleAsync(newAdmin, "Admin");
 
                 Console.WriteLine("Role Seeded");
             }

@@ -22,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CustomerService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
@@ -45,6 +46,7 @@ namespace CustomerService.Controllers
             configuration = config;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCustomerDto>>> GetAllCustomer()
         {
@@ -53,6 +55,7 @@ namespace CustomerService.Controllers
             return Ok(dtos);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GetCustomerDto>> GetCustomerById(int id)
         {
@@ -63,6 +66,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetCustomerDto>(result));
         }
 
+        [Authorize(Roles = "Admin, Service")]
         [HttpPost]
         public async Task<ActionResult<GetCustomerDto>> Post([FromBody] GetCustomerForCreateDto getCustomerForCreateDto)
         {
@@ -79,13 +83,14 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
                 await _customer.Delete(id.ToString());
-                return Ok($"Data student {id} berhasil didelete");
+                return Ok($"Data customer {id} berhasil didelete");
             }
             catch (Exception ex)
             {
@@ -93,6 +98,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("Balance")]
         public async Task<ActionResult<IEnumerable<GetBalanceDto>>> ViewBalance()
         {
@@ -101,6 +107,7 @@ namespace CustomerService.Controllers
             return Ok(dtos);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}/Balance")]
         public async Task<ActionResult<GetBalanceDto>> ViewBalanceById(int id)
         {
@@ -111,6 +118,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetBalanceDto>(result));
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id}/TopUp")]
         public async Task<ActionResult<GetBalanceDto>> TopUpBalance(int id, [FromBody] GetBalanceForCreateDto getBalanceForCreateDto)
         {
@@ -127,6 +135,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{CustomerId}/OrderHistory")]
         public async Task<ActionResult<IEnumerable<DtoOrderOutput>>> ViewOrderHistory(int CustomerId)
         {
@@ -147,6 +156,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("Fee")]
         public async Task<ActionResult<DtoFeeOutput>> CheckFee(DtoFeeInsert input)
         {
@@ -162,6 +172,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("Order")]
         public async Task<ActionResult<DtoOrderInsert>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {
@@ -171,9 +182,10 @@ namespace CustomerService.Controllers
                 if (result != null)
                 {
                     var fee = await _dataClient.CheckFee(
-                        new DtoFeeInsert{
+                        new DtoFeeInsert
+                        {
                             StartDest = dtoOrderInsert.startDest,
-                            EndDest = dtoOrderInsert.endDest                      
+                            EndDest = dtoOrderInsert.endDest
                         }
                     );
                     if (result.Balance < fee.fee) return BadRequest("Saldo tidak cukup");

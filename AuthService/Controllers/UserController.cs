@@ -6,6 +6,7 @@ using AuthService.Data;
 using AuthService.Dto;
 using AuthService.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace AuthService.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<ApplicationUser> GetAllUser()
         {
@@ -74,6 +76,7 @@ namespace AuthService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{userId}/{status}")]
         public async Task<ActionResult<ApplicationUser>> UpdateUserBlockStatus(string userId, string status)
         {
@@ -93,6 +96,22 @@ namespace AuthService.Controllers
                 );
 
                 return Ok(result.IsBlocked);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("servicetoken/{role}")]
+        public ActionResult<string> GetServiceToken(string role)
+        {
+            try
+            {
+                return Ok(
+                    _user.GenerateServiceToken(role)
+                );
             }
             catch (System.Exception ex)
             {
