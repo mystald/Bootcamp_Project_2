@@ -18,6 +18,7 @@ namespace DriverService.Data
         Task<Driver> GetById(string id);
         Task<Driver> GetBalanceById(string id);
         Task<Driver> GetProfileById(string id);
+        Task<Driver> AddBalanceWhenFinish(int driverId, double addBalance);
         bool SaveChanges();
     }
 }

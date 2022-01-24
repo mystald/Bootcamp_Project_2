@@ -113,11 +113,11 @@ namespace DriverService.Controllers
 
         //Update Accept Order
         [HttpPost("Order/Accept")]
-        public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderDto acceptOrderDto)
+        public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderInputDto acceptOrderInputDto)
         {
             try
             {
-                var driverGetById = await _driver.GetProfileById(acceptOrderDto.DriverId.ToString());
+                var driverGetById = await _driver.GetProfileById(acceptOrderInputDto.DriverId.ToString());
                 
                 if (driverGetById != null)
                 {
@@ -125,8 +125,14 @@ namespace DriverService.Controllers
                     //send sync communication
                     try
                     {
-                        await _orderDataClient.SendDriverToOderForAccept(acceptOrderDto);
-                        return Ok(acceptOrderDto);
+                        var acceptOrder = new AcceptOrderDto{
+                            OrderId = acceptOrderInputDto.OrderId,
+                            DriverId = acceptOrderInputDto.DriverId,
+                            DriverLat = driverGetById.Latitude,
+                            DriverLong = driverGetById.Longitude
+                        };
+                        await _orderDataClient.SendDriverToOderForAccept(acceptOrder);
+                        return Ok(acceptOrderInputDto);
                     }
                     catch (Exception ex)
                     {
@@ -155,7 +161,8 @@ namespace DriverService.Controllers
                     //send sync communication
                     try
                     {
-                        await _orderDataClient.SendDriverToOderForFinish(finishOrderDto);
+                        var order = await _orderDataClient.SendDriverToOderForFinish(finishOrderDto);
+                        await _driver.AddBalanceWhenFinish(finishOrderDto.DriverId, order.fee);
                         return Ok(finishOrderDto);
                     }
                     catch (Exception ex)
@@ -186,7 +193,6 @@ namespace DriverService.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
        
     }
 }

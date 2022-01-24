@@ -20,7 +20,7 @@ namespace DriverService.SyncDataService.Http
             _configuration = configuration;
         }
 
-        public async Task SendDriverToOderForAccept(AcceptOrderDto dri)
+        public async Task<OrderDto> SendDriverToOderForAccept(AcceptOrderDto dri)
         {
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(dri),
@@ -33,15 +33,17 @@ namespace DriverService.SyncDataService.Http
             if (response.IsSuccessStatusCode) 
             {
                 Console.WriteLine("--> Sync POST to OrderService Was OK !");
+                 return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());
             }
             else
             {
                 Console.WriteLine(response.Content.ToString());
                 Console.WriteLine("--> Sync POST to OrderService Failed");
+                throw new Exception(response.ToString());
             }
         }
 
-        public async Task SendDriverToOderForFinish(FinishOrderDto dri)
+        public async Task<OrderDto> SendDriverToOderForFinish(FinishOrderDto dri)
         {
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(dri),
@@ -53,11 +55,14 @@ namespace DriverService.SyncDataService.Http
 
             if (response.IsSuccessStatusCode)
             {
+                
                 Console.WriteLine("--> Sync POST to OrderService Was OK !");
+                return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());
             }
             else
             {
                 Console.WriteLine("--> Sync POST to PaymentService Failed");
+                throw new Exception(response.ToString());
             }
         }
 
