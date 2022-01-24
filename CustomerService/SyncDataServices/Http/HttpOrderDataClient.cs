@@ -29,7 +29,7 @@ namespace CustomerService.SyncDataServices.Http
             var httpContent = new StringContent(
                 JsonSerializer.Serialize(insert),
                 Encoding.UTF8, "application/json");
-            var url = _configuration["AppSettings:K8sOrderService"];
+            var url = _configuration["AppSettings:OrderService"];
             var response = await _httpClient.PostAsync($"{url}/fee", httpContent);
             if (response.IsSuccessStatusCode)
             {
@@ -53,7 +53,7 @@ namespace CustomerService.SyncDataServices.Http
                 Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(
-                _configuration["AppSettings:K8sOrderService"],
+                _configuration["AppSettings:OrderService"],
                 httpContent
             );
 
@@ -73,7 +73,7 @@ namespace CustomerService.SyncDataServices.Http
 
         public async Task<IEnumerable<DtoOrderOutput>> GetOrderHistory(int CustomerId)
         {
-            var url = _configuration["AppSettings:K8sOrderService"];
+            var url = _configuration["AppSettings:OrderService"];
             var response = await _httpClient.GetAsync($"{url}/customer/{CustomerId}");
             if (response.IsSuccessStatusCode)
             {

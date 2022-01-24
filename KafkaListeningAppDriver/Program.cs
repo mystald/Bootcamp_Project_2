@@ -16,7 +16,7 @@ namespace KafkaListeningAppDriver
 
             var Serverconfig = new ConsumerConfig
             {
-                BootstrapServers = config["Settings:K8sKafkaServer"],
+                BootstrapServers = config["Settings:KafkaServer"],
                 GroupId = "tester",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
