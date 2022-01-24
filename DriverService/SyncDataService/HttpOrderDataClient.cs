@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -18,6 +19,9 @@ namespace DriverService.SyncDataService.Http
         {
             _httpClient = httpClient;
             _configuration = configuration;
+
+            httpClient.DefaultRequestHeaders.Authorization =
+                 new AuthenticationHeaderValue("Bearer", _configuration["ServiceTokens:Driver"]);
         }
 
         public async Task<OrderDto> SendDriverToOderForAccept(AcceptOrderDto dri)
@@ -27,10 +31,10 @@ namespace DriverService.SyncDataService.Http
                 Encoding.UTF8, "application/json");
 
             var url = _configuration["OrderService"];
-            
+
             var response = await _httpClient.PostAsync($"{url}/{dri.OrderId}/accept", httpContent);
 
-            if (response.IsSuccessStatusCode) 
+            if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to OrderService Was OK !");
                  return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());

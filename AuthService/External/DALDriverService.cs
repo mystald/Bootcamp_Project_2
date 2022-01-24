@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,6 +20,9 @@ namespace AuthService.External
         {
             _httpClient = httpClient;
             _config = config;
+
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _config["ServiceTokens:Admin"]);
         }
 
         public async Task InsertDriver(DtoDriver driver)

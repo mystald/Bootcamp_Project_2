@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetTopologySuite.Geometries;
 using OrderService.Data;
@@ -11,6 +12,7 @@ using OrderService.Models;
 
 namespace OrderService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class OrderController : ControllerBase
@@ -24,6 +26,7 @@ namespace OrderService.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DtoOrderReturn>>> GetAllOrder()
         {
@@ -31,6 +34,7 @@ namespace OrderService.Controllers
             return Ok(_mapper.Map<IEnumerable<DtoOrderReturn>>(result));
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost("fee")]
         public ActionResult<DtoOrderCheckFeeOutput> GetFee(DtoOrderCheckFeeInsert input)
         {
@@ -44,6 +48,7 @@ namespace OrderService.Controllers
             });
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("customer/{customerId}")]
         public async Task<ActionResult<IEnumerable<DtoOrderReturn>>> GetByCustomer(int customerId)
         {
@@ -51,6 +56,7 @@ namespace OrderService.Controllers
             return Ok(_mapper.Map<IEnumerable<DtoOrderReturn>>(result));
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         [HttpPost]
         public async Task<ActionResult<DtoOrderReturn>> AddOrder([FromBody] DtoOrderInsert order)
         {
@@ -65,6 +71,7 @@ namespace OrderService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Driver")]
         [HttpPost("{orderId}/accept")]
         public async Task<ActionResult<DtoOrderReturn>> AcceptOrder(int orderId, [FromBody] DtoOrderAccept driver)
         {
@@ -94,6 +101,7 @@ namespace OrderService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Driver")]
         [HttpPost("{orderId}/finish")]
         public async Task<ActionResult<DtoOrderReturn>> FinishOrder(int orderId, [FromBody] DtoOrderFinish driver)
         {

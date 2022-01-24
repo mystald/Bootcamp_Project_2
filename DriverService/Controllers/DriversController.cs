@@ -7,10 +7,12 @@ using DriverService.Data;
 using DriverService.Dtos;
 using DriverService.Models;
 using DriverService.SyncDataService.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriverService.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class DriversController : ControllerBase
@@ -26,6 +28,7 @@ namespace DriverService.Controllers
         }
 
         //Get All 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DriverDto>>> GetAll()
         {
@@ -34,7 +37,8 @@ namespace DriverService.Controllers
             return Ok(dtos);
         }
 
-         //Get Driver By Id
+        //Get Driver By Id
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<DriverDto>> GetDriverById(int id)
         {
@@ -46,6 +50,7 @@ namespace DriverService.Controllers
         }
 
         //Get Balance Driver By Id
+        [Authorize(Roles = "Driver")]
         [HttpGet("{id}/Balance")]
         public async Task<ActionResult<GetDriverBalanceDto>> GetBalance(int id)
         {
@@ -57,6 +62,7 @@ namespace DriverService.Controllers
         }
 
         //Get Profile Driver By Id
+        [Authorize(Roles = "Driver")]
         [HttpGet("{id}/Profile")]
         public async Task<ActionResult<GetDriverProfileDto>> GetProfile(int id)
         {
@@ -68,6 +74,7 @@ namespace DriverService.Controllers
         }
 
         //Update Position Driver By Id
+        [Authorize(Roles = "Driver")]
         [HttpPut("{id}/Position")]
         public ActionResult<DriverDto> UpdatePosition(int id, UpdateForPositionDto updateForPositionDto)
         {
@@ -90,6 +97,7 @@ namespace DriverService.Controllers
         }
 
         //Accept Driver By Id
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{id}/Approve")]
         public ActionResult<DriverDto> AcceptDriver(int id, AcceptDriverDto acceptDriverDto)
         {
@@ -112,6 +120,7 @@ namespace DriverService.Controllers
         }
 
         //Update Accept Order
+        [Authorize(Roles = "Driver")]
         [HttpPost("Order/Accept")]
         public async Task<ActionResult<AcceptOrderDto>> UpdateAcceptOrder(AcceptOrderInputDto acceptOrderInputDto)
         {
@@ -121,7 +130,7 @@ namespace DriverService.Controllers
                 
                 if (driverGetById != null)
                 {
-                    if(driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
+                    if (driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
                     //send sync communication
                     try
                     {
@@ -148,6 +157,7 @@ namespace DriverService.Controllers
         }
 
         //Update Finish Order
+        [Authorize(Roles = "Driver")]
         [HttpPost("Order/Finish")]
         public async Task<ActionResult<AcceptOrderDto>> FinishAcceptOrder(FinishOrderDto finishOrderDto)
         {
@@ -157,7 +167,7 @@ namespace DriverService.Controllers
 
                 if (driverGetById != null)
                 {
-                    if(driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
+                    if (driverGetById.IsApprove == false) return BadRequest("Driver belum di approve");
                     //send sync communication
                     try
                     {
@@ -179,6 +189,7 @@ namespace DriverService.Controllers
         }
 
         //Insert Driver
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<DriverDto>> InsertDriver([FromBody] DriverInsertDto input)
         {

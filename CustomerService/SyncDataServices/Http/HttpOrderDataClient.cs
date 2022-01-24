@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CustomerService.Dtos;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace CustomerService.SyncDataServices.Http
 {
@@ -18,6 +19,9 @@ namespace CustomerService.SyncDataServices.Http
         {
             _httpClient = httpClient;
             _configuration = configuration;
+
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _configuration["ServiceTokens:Customer"]);
         }
 
         public async Task<DtoFeeOutput> CheckFee(DtoFeeInsert insert)
@@ -77,14 +81,15 @@ namespace CustomerService.SyncDataServices.Http
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to Order Service was OK !");
+                var value = JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
+                return value;
             }
             else
             {
                 Console.WriteLine("--> Sync POST to Order Service failed");
                 Console.WriteLine(response.StatusCode);
+                throw new Exception(await response.Content.ReadAsStringAsync());
             }
-            var value = JsonSerializer.Deserialize<IEnumerable<DtoOrderOutput>>(await response.Content.ReadAsByteArrayAsync());
-            return value;
         }
     }
 }

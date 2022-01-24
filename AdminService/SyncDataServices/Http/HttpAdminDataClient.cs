@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Net.Http.Headers;
 
 namespace AdminService.SyncDataServices.Http
 {
@@ -19,6 +20,9 @@ namespace AdminService.SyncDataServices.Http
         {
             _httpClient = httpClient;
             _configuration = configuration;
+
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _configuration["ServiceTokens:Admin"]);
         }
         public async Task<IEnumerable<DtoCustomerGet>> GetCustomer()
         {
@@ -33,6 +37,7 @@ namespace AdminService.SyncDataServices.Http
             {
                 Console.WriteLine("--> Sync GET to Customer Service failed");
                 Console.WriteLine(response.StatusCode);
+                Console.WriteLine(_configuration["ServiceTokens:Admin"]);
                 throw new Exception(await response.Content.ReadAsStringAsync());
 
             }

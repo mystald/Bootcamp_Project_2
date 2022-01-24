@@ -8,9 +8,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using AdminService.Dtos;
 using AdminService.SyncDataServices.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdminService.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminsController : ControllerBase
@@ -190,6 +192,6 @@ namespace AdminService.Controllers
             }
         }
 
-    
+
     }
 }

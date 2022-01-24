@@ -66,7 +66,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetCustomerDto>(result));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Service")]
         [HttpPost]
         public async Task<ActionResult<GetCustomerDto>> Post([FromBody] GetCustomerForCreateDto getCustomerForCreateDto)
         {
@@ -83,13 +83,14 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
                 await _customer.Delete(id.ToString());
-                return Ok($"Data student {id} berhasil didelete");
+                return Ok($"Data customer {id} berhasil didelete");
             }
             catch (Exception ex)
             {
@@ -97,6 +98,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("Balance")]
         public async Task<ActionResult<IEnumerable<GetBalanceDto>>> ViewBalance()
         {
@@ -105,6 +107,7 @@ namespace CustomerService.Controllers
             return Ok(dtos);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}/Balance")]
         public async Task<ActionResult<GetBalanceDto>> ViewBalanceById(int id)
         {
@@ -115,6 +118,7 @@ namespace CustomerService.Controllers
             return Ok(_mapper.Map<GetBalanceDto>(result));
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id}/TopUp")]
         public async Task<ActionResult<GetBalanceDto>> TopUpBalance(int id, [FromBody] GetBalanceForCreateDto getBalanceForCreateDto)
         {
@@ -131,6 +135,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{CustomerId}/OrderHistory")]
         public async Task<ActionResult<IEnumerable<DtoOrderOutput>>> ViewOrderHistory(int CustomerId)
         {
@@ -151,6 +156,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("Fee")]
         public async Task<ActionResult<DtoFeeOutput>> CheckFee(DtoFeeInsert input)
         {
@@ -166,6 +172,7 @@ namespace CustomerService.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("Order")]
         public async Task<ActionResult<DtoOrderInsert>> CreateOrder(DtoOrderInsert dtoOrderInsert)
         {

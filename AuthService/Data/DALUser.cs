@@ -80,6 +80,29 @@ namespace AuthService.Data
             return tokenString;
         }
 
+        public string GenerateServiceToken(string Role)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, "Services"));
+            claims.Add(new Claim(ClaimTypes.Role, Role));
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["AppSettings:Secret"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+
+                Expires = DateTime.UtcNow.AddHours(1),
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature),
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            return tokenString;
+        }
+
         public IEnumerable<ApplicationUser> GetAllUser()
         {
             return _um.Users.ToList();
