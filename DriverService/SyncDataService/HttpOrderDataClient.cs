@@ -37,7 +37,7 @@ namespace DriverService.SyncDataService.Http
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync POST to OrderService Was OK !");
-                 return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());
+                return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());
             }
             else
             {
@@ -59,7 +59,7 @@ namespace DriverService.SyncDataService.Http
 
             if (response.IsSuccessStatusCode)
             {
-                
+
                 Console.WriteLine("--> Sync POST to OrderService Was OK !");
                 return JsonSerializer.Deserialize<OrderDto>(await response.Content.ReadAsStringAsync());
             }

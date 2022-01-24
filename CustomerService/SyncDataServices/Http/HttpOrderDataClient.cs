@@ -73,9 +73,6 @@ namespace CustomerService.SyncDataServices.Http
 
         public async Task<IEnumerable<DtoOrderOutput>> GetOrderHistory(int CustomerId)
         {
-            // var httpContent = new StringContent(
-            //     JsonSerializer.Serialize(CustomerId),
-            //     Encoding.UTF8, "application/json");
             var url = _configuration["AppSettings:OrderService"];
             var response = await _httpClient.GetAsync($"{url}/customer/{CustomerId}");
             if (response.IsSuccessStatusCode)
@@ -93,6 +90,4 @@ namespace CustomerService.SyncDataServices.Http
         }
     }
 }
-
-//ni kalo ke local-->"PaymentService":"http://localhost:24183/api/p/enrollments",
 

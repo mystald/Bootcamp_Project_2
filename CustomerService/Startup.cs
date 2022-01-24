@@ -39,7 +39,7 @@ namespace CustomerService
         {
             //Insert Connection String
             services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("")));
+            options.UseSqlServer(Configuration.GetConnectionString("Db")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
